@@ -1,0 +1,405 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+%
+\documentclass[
+  super,
+  preprint,
+  3p]{elsarticle}
+
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\setcounter{secnumdepth}{5}
+% Make \paragraph and \subparagraph free-standing
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+
+\makeatletter
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\makeatletter
+\@ifpackageloaded{tcolorbox}{}{\usepackage[many]{tcolorbox}}
+\makeatother
+\makeatletter
+\@ifundefined{shadecolor}{\definecolor{shadecolor}{rgb}{.97, .97, .97}}
+\makeatother
+\makeatletter
+\makeatother
+\journal{To be determined}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\usepackage[]{natbib}
+\bibliographystyle{elsarticle-num}
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={Extracorporeal CPR for Refractory Out-of-Hospital Cardiac Arrest},
+  pdfauthor={James M Brophy},
+  pdfkeywords={extracorporeal CPR, Bayesian statistics},
+  colorlinks=true,
+  linkcolor={blue},
+  filecolor={Maroon},
+  citecolor={Blue},
+  urlcolor={Blue},
+  pdfcreator={LaTeX via pandoc}}
+
+\setlength{\parindent}{6pt}
+\begin{document}
+
+\begin{frontmatter}
+\title{Extracorporeal CPR for Refractory Out-of-Hospital Cardiac
+Arrest \\\large{A Bayesian Perspective} }
+\author[1]{James M Brophy%
+\corref{cor1}%
+\fnref{fn1}}
+ \ead{james.brophy@mcgill.ca} 
+
+\affiliation[1]{organization={McGill University Health Center, Centre
+for Health Outcomes Research (CORE)},addressline={5252 Boul. de
+Maisonneuve West Room 2B.37},city={Montreal},postcode={H4A
+3S5},postcodesep={}}
+
+\cortext[cor1]{Corresponding author}
+\fntext[fn1]{JMB is a research scholar supported by Les Fonds de
+Recherche Québec Santé}
+        
+\begin{abstract}
+A recent randomized clinical trial reported in patients with refractory
+out-of-hospital cardiac arrest, extracorporeal CPR and conventional CPR
+had similar effects on survival with a favorable neurologic outcome.
+Herein, it is examined whether a Bayesian perspective allows any
+additional insights into the interpretation of this trial.
+\end{abstract}
+
+
+
+
+
+\begin{keyword}
+    extracorporeal CPR \sep 
+    Bayesian statistics
+\end{keyword}
+\end{frontmatter}
+    \ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[sharp corners, borderline west={3pt}{0pt}{shadecolor}, breakable, frame hidden, enhanced, interior hidden, boxrule=0pt]}{\end{tcolorbox}}\fi
+
+\hypertarget{introduction}{%
+\section{Introduction}\label{introduction}}
+
+Out-of-hospital cardiac arrest is a frequent event and fortunately its
+devastating consequences can be partially mitigated by rapid
+commencement of basic life support with high-quality chest compressions
+and external defibrillation (conventional cardiopulmonary resuscitation
+(CPR)). However, there remains a substantial subset of individuals who
+do not respond rapidly to these measures and whether more invasive
+measures. Whether the addition of more aggressive measure including
+extracorporeal CPR (the addition of extracorporeal membrane oxygenation
+to standard advanced cardiac life support) can improve survival and
+diminish anoxic brain injury is a current topic of research. The largest
+randomized clinical trial (RCT) examining this question recently
+published their results\citep{CPR2023a}. For the primary outcome, 30 day
+survival without significant neurological deficit, the authors observed
+an odds ratio of 1.4 (95\% confidence interval, 0.5 to 3.5; P = 0.52) in
+favor of extracorporeal CPR for leading to their conclusion ``In
+patients with refractory out-of-hospital cardiac arrest, extracorporeal
+CPR and conventional CPR had similar effects on survival with a
+favorable neurological outcome''.\citep{CPR2023a}
+
+This communication does not reiterate the many reasons to be wary of
+null hypothesis significance testing (NHST), p values and confidence
+intervals\citep{RN5420}. Rather it assumes the reader has perhaps heard
+that Bayesian methods mirror our intuitive learning process and is
+curious about its potential application to RCT interpretations.
+
+Therefore the goal of this communication is to examine whether a
+Bayesian perspective permits additional insights into the specific
+clinical question regarding any added value of extracorporeal CPR
+following an out-of-hospital arrest in patients refractory to standard
+CPR.
+
+\hypertarget{methods}{%
+\section{Methods}\label{methods}}
+
+The data for the primary outcome, 30 day survival with intact
+neurological status, based on an intention to treat (ITT) analysis was
+abstracted from the original INCEPTION trial \citep{CPR2023a} and used
+for the primary analysis. The ITT analysis has the advantage of
+minimizing bias by preserving the prognostic balance afforded by
+randomization as well as assuring the validity of the statistical
+analyses. ITT assesses subjects based on the group they were initially
+(and randomly) allocated to, regardless of whether or not they dropped
+out, were fully adhered to the treatment or switched to an alternative
+treatment. ITT analyses can therefore be seen as a conservative estimate
+which mirrors clinical effectiveness. In contrast, a per protocol (PP)
+analysis involves a comparison of treatment groups in a trial that
+includes only those patients who completed the treatment they were
+originally allocated to. Similarly an ``as treated'' analysis considers
+only which treatments subjects received, regardless of their
+randomization status and protocol adherence. While both PP and
+as-treated analyses alone may lead to bias, in conjunction with an ITT
+analysis they may provide additional insights into efficacy and have
+also been examined from a Bayesian perspective.
+
+Bayesian analytical approaches provide a number of benefits over the
+classical NHST approach, including parameter estimation accompanied by
+direct probability statements about parameters of interest (herein the
+risk of survival with intact neurological status), and the incorporation
+prior knowledge \citep{BrophyCardio, Zampieri}.
+
+These probability statements arise from the posterior distribution
+according to the following equation:
+\[ \text{Posterior}  = \frac{\text{Probability of the data} * \text{Prior}}{\text{Normalizing Constant}} \]
+
+Therefore, in addition to the current data summarized by the probability
+of the data (likelihood function) one requires a prior probability
+distribution for each parameter. The mechanics of the Bayesian analyses
+were performed using the Stan programming language \citep{stan} through
+the R package rstanarm \citep{rstanarm} and fit a logistic regression
+model with a single treatment parameter, \(\theta\). Because our focus
+is the interpretation of the INCEPTION trial alone, our primary analysis
+used rstanarm's default vague parameter priors
+(\(log(\theta) \sim Normal [0, 2.50]\), thereby assuring that the
+posterior distribution is dominated by the observed INCEPTION data.
+
+The robustness of the Bayesian approach is often assessed by sensitivity
+analyses that examine the variation in the posterior probability as a
+function of the choice of different prior distributions. Using prior
+information also underscores the important advantage of Bayesian
+analyses to learn sequentially. There were two previous RCTs examining
+extracorporeal CPR{[}\citet{RN6759}{]}\citep{RN6751} and while the
+protocols are not identical, it may be reasonable to allow this data can
+serve as an informed prior which can be updated with the INCEPTION data.
+This prior information of the probability of success in each arm,
+\(X_i\), can be summarized by a Beta distribution as follow
+\[X_i\sim\mbox{Beta}(\alpha_0,\beta_0)\] where in the context of
+Bernoulli trials, \(\alpha\) can be interpreted as 1 + number of
+successes and \(\beta\) can be interpreted as 1 + number of failures.
+The mean and variance of this distribution are
+\[\mu=\frac{\alpha}{\alpha+\beta}\]
+
+\[\sigma^2=\frac{\alpha\beta}{(\alpha+\beta)^2(\alpha+\beta+1)}\] where
+\(\alpha\) and \(\beta\) are the number of successes and failures
+respectively. The difference between the two treatment arms of these
+previous studies can then serve as the prior information which in the
+Bayesian paradigm can be updated with the INCEPTION data to form a
+posterior distribution.
+
+Posterior distributions are summarized with medians and 95\%
+highest-density intervals (credible intervals), defined as the narrowest
+interval containing 95\% of the probability density function
+\citep{mcelreath2020}. We not only calculated the posterior probability
+of any benefit (OR \textgreater1.00), but also of clinically meaningful
+benefits (defined as OR \textgreater1.10).
+
+All analyses were executed within the integrated development environment
+of RStudio and the statistical code can be found on Github
+(https://github.com/brophyj/eCPR).
+
+\hypertarget{results}{%
+\section{Results}\label{results}}
+
+The ITT data from the three pertinent trials is shown in Table 1.
+Performing a Bayesian analysis on the INCEPTION trial, using a vague
+prior, produces an odds ratio 1.32 (95\% Credible Interval (CrI) 0.54 -
+3.22). The closeness of this result to the original analysis confirms
+the lack if impact of the vague prior and shows this Bayesian analysis
+is dominated by the observed data.
+
+\newpage
+
+\hypertarget{tables}{%
+\section{Tables}\label{tables}}
+
+\begin{longtable}[]{@{}lrrrr@{}}
+\caption{Table 1 Extracted ITT trial data}\tabularnewline
+\toprule()
+Trial & Fail CPR & Fail eCPR & Success CPR & Success eCPR \\
+\midrule()
+\endfirsthead
+\toprule()
+Trial & Fail CPR & Fail eCPR & Success CPR & Success eCPR \\
+\midrule()
+\endhead
+INCEPTION & 52 & 56 & 10 & 14 \\
+ARREST & 15 & 8 & 0 & 6 \\
+PRAGUE & 108 & 86 & 24 & 38 \\
+\bottomrule()
+\end{longtable}
+
+\hypertarget{bayesian-analysis}{%
+\section{Bayesian analysis}\label{bayesian-analysis}}
+
+\begin{verbatim}
+
+Attaching package: 'LearnBayes'
+\end{verbatim}
+
+\begin{verbatim}
+The following object is masked from 'package:rstanarm':
+
+    laplace
+\end{verbatim}
+
+\begin{verbatim}
+
+Model Info:
+ function:     stan_glm
+ family:       binomial [logit]
+ formula:      prop_success ~ Tx
+ algorithm:    sampling
+ sample:       4000 (posterior sample size)
+ priors:       see help('prior_summary')
+ observations: 2
+ predictors:   2
+
+Estimates:
+              mean    sd      10%     50%     90%  
+(Intercept) -1.5987  0.2265 -1.8906 -1.5963 -1.3088
+TxeCPR       0.1542  0.0501  0.0897  0.1535  0.2181
+
+Fit Diagnostics:
+           mean    sd      10%     50%     90%  
+mean_PPD 11.9740  3.1650  8.0000 12.0000 16.0000
+
+The mean_ppd is the sample average posterior predictive distribution of the outcome variable (for details see help('summary.stanreg')).
+
+MCMC diagnostics
+              mcse   Rhat   n_eff
+(Intercept)   0.0042 0.9995 2872 
+TxeCPR        0.0009 0.9999 2827 
+mean_PPD      0.0544 0.9994 3387 
+log-posterior 0.0238 1.0006 1835 
+
+For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure of effective sample size, and Rhat is the potential scale reduction factor on split chains (at convergence Rhat=1).
+\end{verbatim}
+
+\textbf{Have obviously not done this correctly as the prior should have
+shifted the default model parameter for eCPR to a larger number with a
+small sd}
+
+\hypertarget{figures}{%
+\section{Figures}\label{figures}}
+
+\begin{verbatim}
+Warning: Removed 9 rows containing missing values (`stat_slabinterval()`).
+\end{verbatim}
+
+\begin{verbatim}
+Warning: Using the `size` aesthietic with geom_segment was deprecated in ggplot2 3.4.0.
+i Please use the `linewidth` aesthetic instead.
+\end{verbatim}
+
+\includegraphics{manuscript_files/figure-pdf/unnamed-chunk-4-1.pdf}
+
+\includegraphics{manuscript_files/figure-pdf/unnamed-chunk-4-2.pdf}
+
+\newpage
+
+
+\renewcommand\refname{References}
+  \bibliography{bibliography.bib}
+
+
+\end{document}

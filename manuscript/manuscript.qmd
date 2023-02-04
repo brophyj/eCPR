@@ -1,0 +1,279 @@
+---
+title: Extracorporeal CPR for Refractory Out-of-Hospital Cardiac Arrest
+subtitle: A Bayesian Perspective
+author:
+  - name: James M Brophy
+    email: james.brophy@mcgill.ca
+    affiliations: 
+        - id: McGill University 
+          name: McGill University Health Center
+          department: Centre for Health Outcomes Research (CORE) 
+          address: 5252 Boul. de Maisonneuve West Room 2B.37
+          city: Montreal
+          state: QC
+          postal-code: H4A 3S5
+    attributes:
+        corresponding: true
+    note: JMB is a research scholar supported by Les Fonds de Recherche Québec Santé
+abstract: |
+  A recent randomized clinical trial reported in patients with refractory out-of-hospital cardiac arrest, extracorporeal CPR and conventional CPR had similar effects on survival with a favorable neurologic outcome. Herein, it is examined whether a Bayesian perspective allows any additional insights into the interpretation of this trial.
+keywords: 
+  - extracorporeal CPR
+  - Bayesian statistics
+date: last-modified
+bibliography: bibliography.bib
+format:
+  elsevier-pdf:
+    keep-tex: true
+    journal:
+      name: To be determined
+      formatting: preprint
+      model: 3p
+      cite-style: super
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+# Introduction
+
+Out-of-hospital cardiac arrest is a frequent event and fortunately its
+devastating consequences can be partially mitigated by rapid
+commencement of basic life support with high-quality chest compressions
+and external defibrillation (conventional cardiopulmonary resuscitation
+(CPR)). However, there remains a substantial subset of individuals who
+do not respond rapidly to these measures and whether more invasive
+measures. Whether the addition of more aggressive measure including
+extracorporeal CPR (the addition of extracorporeal membrane oxygenation
+to standard advanced cardiac life support) can improve survival and
+diminish anoxic brain injury is a current topic of research. The largest
+randomized clinical trial (RCT) examining this question recently
+published their results[@CPR2023a]. For the primary outcome, 30 day
+survival without significant neurological deficit, the authors observed
+an odds ratio of 1.4 (95% confidence interval, 0.5 to 3.5; P = 0.52) in
+favor of extracorporeal CPR for leading to their conclusion "In patients
+with refractory out-of-hospital cardiac arrest, extracorporeal CPR and
+conventional CPR had similar effects on survival with a favorable
+neurological outcome".[@CPR2023a]
+
+This communication does not reiterate the many reasons to be wary of
+null hypothesis significance testing (NHST), p values and confidence
+intervals[@RN5420]. Rather it assumes the reader has perhaps heard that
+Bayesian methods mirror our intuitive learning process and is curious
+about its potential application to RCT interpretations.
+
+Therefore the goal of this communication is to examine whether a
+Bayesian perspective permits additional insights into the specific
+clinical question regarding any added value of extracorporeal CPR
+following an out-of-hospital arrest in patients refractory to standard
+CPR.
+
+# Methods
+
+The data for the primary outcome, 30 day survival with intact
+neurological status, based on an intention to treat (ITT) analysis was
+abstracted from the original INCEPTION trial [@CPR2023a] and used for
+the primary analysis. The ITT analysis has the advantage of minimizing
+bias by preserving the prognostic balance afforded by randomization as
+well as assuring the validity of the statistical analyses. ITT assesses
+subjects based on the group they were initially (and randomly) allocated
+to, regardless of whether or not they dropped out, were fully adhered to
+the treatment or switched to an alternative treatment. ITT analyses can
+therefore be seen as a conservative estimate which mirrors clinical
+effectiveness. In contrast, a per protocol (PP) analysis involves a
+comparison of treatment groups in a trial that includes only those
+patients who completed the treatment they were originally allocated to.
+Similarly an "as treated" analysis considers only which treatments
+subjects received, regardless of their randomization status and protocol
+adherence. While both PP and as-treated analyses alone may lead to bias,
+in conjunction with an ITT analysis they may provide additional insights
+into efficacy and have also been examined from a Bayesian perspective.
+
+Bayesian analytical approaches provide a number of benefits over the
+classical NHST approach, including parameter estimation accompanied by
+direct probability statements about parameters of interest (herein the
+risk of survival with intact neurological status), and the incorporation
+prior knowledge [@BrophyCardio; @Zampieri].
+
+These probability statements arise from the posterior distribution
+according to the following equation:
+$$ \text{Posterior}  = \frac{\text{Probability of the data} * \text{Prior}}{\text{Normalizing Constant}} $$
+
+Therefore, in addition to the current data summarized by the probability
+of the data (likelihood function) one requires a prior probability
+distribution for each parameter. The mechanics of the Bayesian analyses
+were performed using the Stan programming language [@stan] through the R
+package rstanarm [@rstanarm] and fit a logistic regression model with a
+single treatment parameter, $\theta$. Because our focus is the
+interpretation of the INCEPTION trial alone, our primary analysis used
+rstanarm's default vague parameter priors
+($log(\theta) \sim Normal [0, 2.50]$, thereby assuring that the
+posterior distribution is dominated by the observed INCEPTION data.
+
+The robustness of the Bayesian approach is often assessed by sensitivity
+analyses that examine the variation in the posterior probability as a
+function of the choice of different prior distributions. Using prior
+information also underscores the important advantage of Bayesian
+analyses to learn sequentially. There were two previous RCTs examining
+extracorporeal CPR[@RN6759][@RN6751] and while the protocols are not
+identical, it may be reasonable to allow this data can serve as an
+informed prior which can be updated with the INCEPTION data. This prior
+information of the probability of success in each arm, $X_i$, can be summarized by a Beta distribution as follow
+$$X_i\sim\mbox{Beta}(\alpha_0,\beta_0)$$ 
+where in the context of Bernoulli trials, $\alpha$ can be interpreted as 1 + number of successes and $\beta$ can be interpreted as 1 + number of failures. The mean and variance of this distribution are 
+$$\mu=\frac{\alpha}{\alpha+\beta}$$
+
+$$\sigma^2=\frac{\alpha\beta}{(\alpha+\beta)^2(\alpha+\beta+1)}$$ where
+$\alpha$ and $\beta$ are the number of successes and failures respectively. The difference between the two treatment arms of these previous studies can then serve as the prior information which in the Bayesian paradigm can be updated with the INCEPTION data to form a posterior distribution.    
+
+Posterior distributions are summarized with medians and 95%
+highest-density intervals (credible intervals), defined as the narrowest
+interval containing 95% of the probability density function
+[@mcelreath2020]. We not only calculated the posterior probability of
+any benefit (OR \>1.00), but also of clinically meaningful benefits
+(defined as OR \>1.10).
+
+All analyses were executed within the integrated development environment
+of RStudio and the statistical code can be found on Github
+(https://github.com/brophyj/eCPR).
+
+# Results
+
+The ITT data from the three pertinent trials is shown in Table 1. Performing a Bayesian analysis on the INCEPTION trial, using a vague prior, produces an odds ratio 1.32 (95% Credible Interval (CrI) 0.54 - 3.22). The closeness of this result to the original analysis confirms the lack if impact of the vague prior and shows this Bayesian analysis is dominated by the observed data.
+
+\newpage
+
+```{r echo=FALSE,  message=FALSE, warning=FALSE, include=FALSE, results='hide'}
+knitr::opts_chunk$set(echo = FALSE)
+options(scipen = 1, digits = 3)
+pander::panderOptions('keep.trailing.zeros', TRUE)
+
+library(here)
+library(tidyverse)
+library(broom)
+library(cobalt)
+library(table1)
+library(knitr)
+library(patchwork)
+library(rstanarm)
+library(tidybayes)
+
+```
+
+# Tables
+
+```{r}
+df <- tibble(Trial = c("INCEPTION", "INCEPTION","ARREST", "ARREST", "PRAGUE", "PRAGUE"), Tx = c("CPR", "eCPR", "CPR", "eCPR", "CPR", "eCPR"),
+             fail = c(52, 56, 15, 8, 108, 86),
+             success = c(10,14, 0, 6,24,38 )) %>% 
+  mutate(total = fail + success,
+         prop_success = success / total) 
+df1 <- df[, c(1:4)]  %>% tidyr::pivot_wider(names_from = Tx, values_from = c(fail,success))
+
+
+knitr::kable(df1, caption = "Table 1 Extracted ITT trial data", col.names=c("Trial", "Fail CPR", "Fail eCPR", "Success CPR", "Success eCPR"))
+
+#frequentist INCEPTION  to reproduce NEJM result
+fit <- glm(prop_success ~ Tx, data = df[c(1:2),], family = binomial(link="logit"), weights = total)
+# summary(fit, digits=3)
+# print(c(exp(.262),exp(.262+c(-1,1)*1.96*.457)))
+# [1] 1.300 0.531 3.183
+```
+
+# Bayesian analysis 
+
+```{r cache=TRUE}
+# - INCEPTION alone default vague priors
+set.seed(1234)
+fit1 <- stan_glm(prop_success ~ Tx, data = df[c(1:2),], family = binomial(link="logit"), weights = total, refresh=0)
+# summary(fit1, digits=3)
+# print(c(exp(.2785),exp(.2785+c(-1,1)*1.96*.4537)))
+# get_variables(fit1)
+# prior_summary(fit1)
+# help('prior_summary.stanreg') 
+
+
+# informative priors using 2 previous studies
+# one method
+t1 <- rbeta(100000,25,124)
+t2 <- rbeta(100000,45,95)
+t3 <- t2 - t1
+# t3 can be approximated by a normal distribution with the following parameters
+# mean(t3)
+# [1] 0.154
+# sd(t3)
+# [1] 0.0498
+
+# second method
+library(LearnBayes)
+quantile1=list(p=.025, x=quantile(t3,0.025))     # 2.5% quantile should be 0.0556 
+quantile2=list(p=.975, x=quantile(t3,0.975))      # 97.5% quantile should be 0..251
+par_beta <- beta.select(quantile1, quantile2)
+m_beta <-  par_beta[1]/(par_beta[1]+par_beta[2])
+v_beta <- (par_beta[1] * par_beta[2])/((par_beta[1]+par_beta[2])^2 * (par_beta[1] +par_beta[2] + 1))
+sd_beta <- sqrt(v_beta)
+# Beta (6.35, 39.54) gives mean = 0.138 sd = 0.0504 close to estimates using method 1
+
+# stan_glm doesn't seem able to take a Beta prior distribution so will use normal approximation
+
+fit2 <- stan_glm(prop_success ~ Tx, data = df[c(1:2),], family = binomial(link="logit"), weights = total, refresh=0,
+                 prior = normal(mean(t3), sd(t3)))
+summary(fit2, digits=4)
+
+```
+
+**Have obviously not done this correctly as the prior should have shifted the default model parameter for eCPR to a larger number with a small sd**
+
+
+
+# Figures
+
+```{r}
+
+# tt <- fit1 %>%
+#  spread_draws(`(Intercept)`, `TxeCPR`)
+# sum(tt$TxeCPR>0)/nrow(tt)
+
+
+fit1 %>% tidybayes::tidy_draws() |> 
+  ggplot(aes(x = exp(TxeCPR),
+             fill = after_stat(x > 1),
+             slab_alpha = after_stat((x)))
+  ) +
+  ggdist::stat_halfeye() +
+  scale_x_continuous(name="HR being alive with extracorporeal CPR", limits=c(0, 5)) +
+  scale_y_continuous(name="Density") +
+  labs(title = "Figure 1 INCEPTION ITT analysis with vague prior") +
+  annotate(geom="text", x=2.75,y=.6, label = "Probability of increased survival \n(with intact neurological status) \nwith extracorporeal CPR = 71%") +
+  theme_classic() +
+  theme(legend.position="none") 
+
+# Examining prior information
+x <- seq(0, .5, by = 0.001)
+
+#THEN EACH OF OUR BETAS DISTR
+
+beta1 <- dbeta(x, shape1 = 25, shape2 = 124) # probability of success with CPR
+beta2 <- dbeta(x, shape1 = 45, shape2 = 95)  # probability of success with eCPR
+beta3 <- dbeta(x, shape1 = 6.36, shape2 = 39.65)
+
+mixture <- ggplot()+
+  geom_line(aes(x, beta1),  color = "red",
+            linewidth = 1.2) +
+  geom_line(aes(x, beta2), color = "green",
+            linewidth = 1.2) +
+  geom_line(aes(x, beta3), color = "black",
+            linewidth = 1.2) +
+  labs(title = "Figure 2 Beta Distribution of prior studies",
+       x = "Sequence",
+       y = "Beta",
+       caption = "Green = p(+outcome | eCPR) \nRed = p(+outcome | CPR) \nBlack= difference of the 2 probabilities")
+
+mixture
+
+
+```
+
+\newpage
+
+# References {.unnumbered}
