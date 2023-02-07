@@ -75,6 +75,10 @@
 \def\fps@figure{htbp}
 \makeatother
 
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{longtable}
 \makeatletter
 \makeatother
 \makeatletter
@@ -183,7 +187,7 @@ additional insights into the interpretation of this trial.
     Bayesian statistics
 \end{keyword}
 \end{frontmatter}
-    \ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[sharp corners, borderline west={3pt}{0pt}{shadecolor}, breakable, frame hidden, enhanced, interior hidden, boxrule=0pt]}{\end{tcolorbox}}\fi
+    \ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[sharp corners, enhanced, breakable, borderline west={3pt}{0pt}{shadecolor}, frame hidden, boxrule=0pt, interior hidden]}{\end{tcolorbox}}\fi
 
 \hypertarget{introduction}{%
 \section{Introduction}\label{introduction}}
@@ -331,69 +335,51 @@ PRAGUE & 108 & 86 & 24 & 38 \\
 \hypertarget{bayesian-analysis}{%
 \section{Bayesian analysis}\label{bayesian-analysis}}
 
-\begin{verbatim}
+\begin{longtable}{lrrrc}
+\toprule
+prior & pt\_est <- ... & llimit <- ... & ulimit <- ... & p.gt.1 <- ... \\ 
+\midrule
+vague & 1.32 & 0.543 & 3.21 & 0.727 \\ 
+combined & 1.27 & 0.696 & 2.31 & 0.782 \\ 
+enthusiastic & 1.27 & 0.708 & 2.27 & 0.79 \\ 
+skeptical & 1.25 & 0.695 & 2.26 & 0.777 \\ 
+\bottomrule
+\end{longtable}
 
-Attaching package: 'LearnBayes'
-\end{verbatim}
+\hypertarget{summary-of-what-i-dont-understand}{%
+\section{\texorpdfstring{\textbf{Summary of what I don't
+understand}}{Summary of what I don't understand}}\label{summary-of-what-i-dont-understand}}
 
-\begin{verbatim}
-The following object is masked from 'package:rstanarm':
+This makes only partial sense. 95\% CrI are narrower with informative
+priors. OK, but one would think the enthusiastic prior from a trial
+ARREST that was stopped prematurely for benefit 6/15 vs 0/14 successes
+for eCPR vs CPR would shift the HR of 1.32 to the right but instead the
+HR falls to have a 1.27. The skeptical prior from PRAGUE which was
+stopped for futility (38/124 vs 24/132) does shift HR down 1.25 as
+expected
 
-    laplace
-\end{verbatim}
+So enthusiastic priors - intercept N(.03,.18), Tx N(0.429,0.495)\\
+skeptical prior - intercept N(.182,.386), Tx N(0.306,0.461)
 
-\begin{verbatim}
+Tx for enthusiastic prior \textgreater{} Tx skeptical prior (eCPR) but
+this seems to be offset by the reverse occurring for the intercept
+(CPR).\\
+The problem seems to be in how comparable are these previous RCTs as the
+baseline success for the standard TX (CRP) is radically different 0/14
+vs 24/132.
 
-Model Info:
- function:     stan_glm
- family:       binomial [logit]
- formula:      prop_success ~ Tx
- algorithm:    sampling
- sample:       4000 (posterior sample size)
- priors:       see help('prior_summary')
- observations: 2
- predictors:   2
+When I use a prior that uses the enthusiastic intercept prior and the
+skeptical Tx prior, I get a bigger downward shift with HR 1.220 95\%
+CrI(0.678 2.194) and P\textgreater1 74.5\%
 
-Estimates:
-              mean    sd      10%     50%     90%  
-(Intercept) -1.5987  0.2265 -1.8906 -1.5963 -1.3088
-TxeCPR       0.1542  0.0501  0.0897  0.1535  0.2181
+Can you see any other explanation?
 
-Fit Diagnostics:
-           mean    sd      10%     50%     90%  
-mean_PPD 11.9740  3.1650  8.0000 12.0000 16.0000
-
-The mean_ppd is the sample average posterior predictive distribution of the outcome variable (for details see help('summary.stanreg')).
-
-MCMC diagnostics
-              mcse   Rhat   n_eff
-(Intercept)   0.0042 0.9995 2872 
-TxeCPR        0.0009 0.9999 2827 
-mean_PPD      0.0544 0.9994 3387 
-log-posterior 0.0238 1.0006 1835 
-
-For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure of effective sample size, and Rhat is the potential scale reduction factor on split chains (at convergence Rhat=1).
-\end{verbatim}
-
-\textbf{Have obviously not done this correctly as the prior should have
-shifted the default model parameter for eCPR to a larger number with a
-small sd}
+Do you have any other insights?
 
 \hypertarget{figures}{%
 \section{Figures}\label{figures}}
 
-\begin{verbatim}
-Warning: Removed 9 rows containing missing values (`stat_slabinterval()`).
-\end{verbatim}
-
-\begin{verbatim}
-Warning: Using the `size` aesthietic with geom_segment was deprecated in ggplot2 3.4.0.
-i Please use the `linewidth` aesthetic instead.
-\end{verbatim}
-
 \includegraphics{manuscript_files/figure-pdf/unnamed-chunk-4-1.pdf}
-
-\includegraphics{manuscript_files/figure-pdf/unnamed-chunk-4-2.pdf}
 
 \newpage
 
