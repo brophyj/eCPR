@@ -187,7 +187,7 @@ additional insights into the interpretation of this trial.
     Bayesian statistics
 \end{keyword}
 \end{frontmatter}
-    \ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[sharp corners, enhanced, breakable, borderline west={3pt}{0pt}{shadecolor}, frame hidden, boxrule=0pt, interior hidden]}{\end{tcolorbox}}\fi
+    \ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, interior hidden, borderline west={3pt}{0pt}{shadecolor}, breakable, sharp corners, boxrule=0pt, enhanced]}{\end{tcolorbox}}\fi
 
 \hypertarget{introduction}{%
 \section{Introduction}\label{introduction}}
@@ -376,10 +376,31 @@ Can you see any other explanation?
 
 Do you have any other insights?
 
+Update 2023/02/07 Might make most sense to interpret the INCEPTION trial
+based on the baseline CPR risk observed in that trial and provide
+informative priors only for the Tx variable (enthusiastic from ARREST,
+skeptical from PRAGUE)
+
+\hypertarget{bayesian-prior-analysis-2}{%
+\section{Bayesian prior analysis \#2}\label{bayesian-prior-analysis-2}}
+
+\begin{longtable}{lrrrc}
+\toprule
+prior & pt\_est <- ... & llimit <- ... & ulimit <- ... & p.gt.1 <- ... \\ 
+\midrule
+vague & 1.32 & 0.543 & 3.21 & 0.727 \\ 
+combined & 1.35 & 0.705 & 2.58 & 0.782 \\ 
+enthusiastic & 1.40 & 0.738 & 2.67 & 0.79 \\ 
+skeptical & 1.32 & 0.700 & 2.50 & 0.777 \\ 
+\bottomrule
+\end{longtable}
+
+This seems like a reasonable solution
+
 \hypertarget{figures}{%
 \section{Figures}\label{figures}}
 
-\includegraphics{manuscript_files/figure-pdf/unnamed-chunk-4-1.pdf}
+\includegraphics{manuscript_files/figure-pdf/unnamed-chunk-5-1.pdf}
 
 \newpage
 

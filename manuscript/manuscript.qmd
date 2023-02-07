@@ -157,6 +157,7 @@ library(knitr)
 library(patchwork)
 library(rstanarm)
 library(tidybayes)
+library(gt)
 
 ```
 
@@ -251,7 +252,6 @@ table_tbl <-
     p.gt.1 <- c(fig_prob, comb_prior[1], enth_prior[1], skep_prior[1])
   )
 
-library(gt)
 gt(table_tbl) %>%
   tab_stubhead(label = "Priors") 
 ```
@@ -272,6 +272,46 @@ Can you see any other explanation?
 
 Do you have any other insights?
 
+Update 2023/02/07
+Might make most sense to interpret the INCEPTION trial based on the baseline CPR risk observed in that trial and provide informative priors only for the Tx variable (enthusiastic from ARREST, skeptical from PRAGUE)
+
+# Bayesian prior analysis #2
+```{r}
+## try re-running using prior for eCPR from different studies but leaving CPR with vague prior since baseline risks with CPR seem to vary
+## widely btw the different studies
+
+eCRP_bayes_no_intercept_prior <- function(data, m_eCPR, sd_eCPR ) {
+  set.seed(1234)
+  fit <- stan_glm(prop_success ~ Tx, data = data, family = binomial(link="logit"), weights = total, refresh=0,
+                  prior = normal(m_eCPR, sd_eCPR))
+  fit_sum <- summary(fit, digits=3)
+  conf_95 <- c(exp(fit_sum[2]),exp(fit_sum[2]+c(-1,1)*1.96*fit_sum[10]))
+  tt <- fit %>%
+    spread_draws(`(Intercept)`, `TxeCPR`)
+  fig_prob <- sum(tt$TxeCPR>0)/nrow(tt)
+  fit_draws <- fit %>% tidybayes::tidy_draws() 
+  my_list <- list(fig_prob, conf_95, fit_draws)
+  return(my_list)
+}
+
+comb_prior1 <-eCRP_bayes_no_intercept_prior(df[c(1:2),], comb_m_eCPR, comb_sd_eCPR) #stan_glm with combined prior
+enth_prior1 <- eCRP_bayes_no_intercept_prior(df[c(1:2),], enth_m_eCPR, enth_sd_eCPR) #stan_glm with enthusiastic prior
+skep_prior1 <- eCRP_bayes_no_intercept_prior(df[c(1:2),], skep_m_eCPR, skep_sd_eCPR) #stan_glm with skeptical prior
+
+table_tbl_1 <- 
+  tibble(
+    prior = c("vague", "combined", "enthusiastic", "skeptical"),
+    pt_est <- c(conf_95[1], comb_prior1[[2]][1], enth_prior1[[2]][1], skep_prior1[[2]][1]),
+    llimit <- c(conf_95[2], comb_prior1[[2]][2], enth_prior1[[2]][2], skep_prior1[[2]][2]),
+    ulimit <- c(conf_95[3], comb_prior1[[2]][3], enth_prior1[[2]][3], skep_prior1[[2]][3]),
+    p.gt.1 <- c(fig_prob, comb_prior[1], enth_prior[1], skep_prior[1])
+  )
+
+gt(table_tbl_1) %>%
+  tab_stubhead(label = "Priors") 
+```
+
+This seems like a reasonable solution
 
 # Figures
 
