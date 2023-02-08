@@ -35,6 +35,25 @@ editor:
     wrap: 72
 ---
 
+
+```{r echo=FALSE,  message=FALSE, warning=FALSE, include=FALSE, results='hide'}
+knitr::opts_chunk$set(echo = FALSE)
+options(scipen = 1, digits = 3)
+pander::panderOptions('keep.trailing.zeros', TRUE)
+
+library(here)
+library(tidyverse)
+library(broom)
+library(cobalt)
+library(table1)
+library(knitr)
+library(patchwork)
+library(rstanarm)
+library(tidybayes)
+library(gt)
+
+```
+
 # Introduction
 
 Out-of-hospital cardiac arrest is a frequent event and fortunately its
@@ -45,7 +64,7 @@ and external defibrillation (conventional cardiopulmonary resuscitation
 do not respond rapidly to these measures and whether more invasive
 measures. Whether the addition of more aggressive measure including
 extracorporeal CPR (the addition of extracorporeal membrane oxygenation
-to standard advanced cardiac life support) can improve survival and
+to standard advanced cardiac life support (eCPR)) can improve survival and
 diminish anoxic brain injury is a current topic of research. The largest
 randomized clinical trial (RCT) examining this question recently
 published their results[@CPR2023a]. For the primary outcome, 30 day
@@ -75,19 +94,7 @@ neurological status, based on an intention to treat (ITT) analysis was
 abstracted from the original INCEPTION trial [@CPR2023a] and used for
 the primary analysis. The ITT analysis has the advantage of minimizing
 bias by preserving the prognostic balance afforded by randomization as
-well as assuring the validity of the statistical analyses. ITT assesses
-subjects based on the group they were initially (and randomly) allocated
-to, regardless of whether or not they dropped out, were fully adhered to
-the treatment or switched to an alternative treatment. ITT analyses can
-therefore be seen as a conservative estimate which mirrors clinical
-effectiveness. In contrast, a per protocol (PP) analysis involves a
-comparison of treatment groups in a trial that includes only those
-patients who completed the treatment they were originally allocated to.
-Similarly an "as treated" analysis considers only which treatments
-subjects received, regardless of their randomization status and protocol
-adherence. While both PP and as-treated analyses alone may lead to bias,
-in conjunction with an ITT analysis they may provide additional insights
-into efficacy and have also been examined from a Bayesian perspective.
+well as assuring the validity of the statistical analyses. 
 
 Bayesian analytical approaches provide a number of benefits over the
 classical NHST approach, including parameter estimation accompanied by
@@ -115,75 +122,52 @@ analyses that examine the variation in the posterior probability as a
 function of the choice of different prior distributions. Using prior
 information also underscores the important advantage of Bayesian
 analyses to learn sequentially. There were two previous RCTs examining
-extracorporeal CPR[@RN6759][@RN6751] and while the protocols are not
-identical, it may be reasonable to allow this data can serve as an
-informed prior which can be updated with the INCEPTION data. This prior
-information of the probability of success in each arm, $X_i$, can be summarized by a Beta distribution as follow
-$$X_i\sim\mbox{Beta}(\alpha_0,\beta_0)$$ 
-where in the context of Bernoulli trials, $\alpha$ can be interpreted as 1 + number of successes and $\beta$ can be interpreted as 1 + number of failures. The mean and variance of this distribution are 
-$$\mu=\frac{\alpha}{\alpha+\beta}$$
+extracorporeal CPR[@RN6759; @RN6751] and while the protocols are not
+identical, it may be reasonable to allow this data to serve as 
+informed priors for the eCPR parameter, which can be updated with the INCEPTION data.    
 
-$$\sigma^2=\frac{\alpha\beta}{(\alpha+\beta)^2(\alpha+\beta+1)}$$ where
-$\alpha$ and $\beta$ are the number of successes and failures respectively. The difference between the two treatment arms of these previous studies can then serve as the prior information which in the Bayesian paradigm can be updated with the INCEPTION data to form a posterior distribution.    
+This prior
+information of the probability of eCPR success in each previous trial, $X_i$, can be summarized as a normal distribution with a mean equal to the proportion of successes, $\hat{p_i}$ with a standard deviation equal to $$\sqrt{\hat{p_i}*(1-\hat{p_i})}$$ 
+As  baseline success rates for standard CPR varies markedly between the three studies, it was decided to maintain the INCEPTION control baseline with the vague prior for all analyses and to update only the eCPR arm with prior information.    
 
 Posterior distributions are summarized with medians and 95%
 highest-density intervals (credible intervals), defined as the narrowest
 interval containing 95% of the probability density function
 [@mcelreath2020]. We not only calculated the posterior probability of
-any benefit (OR \>1.00), but also of clinically meaningful benefits
-(defined as OR \>1.10).
+any additional survival with eCPR (OR \>1.00), but also of clinically meaningful benefits
+(defined as OR \>1.10).     
 
-All analyses were executed within the integrated development environment
-of RStudio and the statistical code can be found on Github
+ITT assesses subjects based on the group they were initially (and randomly) allocated
+to, regardless of whether or not they dropped out, were fully adhered to
+the treatment or switched to an alternative treatment. ITT analyses can
+therefore be seen as a conservative estimate which mirrors clinical
+effectiveness. In contrast, a per protocol (PP) analysis involves a
+comparison of treatment groups in a trial that includes only those
+patients who completed the treatment they were originally allocated to.
+Similarly an "as treated" analysis considers only which treatments
+subjects received, regardless of their randomization status and protocol
+adherence. While both PP and as-treated analyses alone may lead to bias,
+in conjunction with an ITT analysis they may provide additional insights
+into efficacy and have also been examined from a Bayesian perspective.
+
+All analyses were executed using `R`[@R]  within the integrated development environment
+of RStudio. Bayesian analyses were performed using the front end `rstanarm` package[@rstanarm] to the `Stan` programming language[stan]. The statistical code can be found on Github
 (https://github.com/brophyj/eCPR).
 
 # Results
-
-The ITT data from the three pertinent trials is shown in Table 1. Performing a Bayesian analysis on the INCEPTION trial, using a vague prior, produces an odds ratio 1.32 (95% Credible Interval (CrI) 0.54 - 3.22). The closeness of this result to the original analysis confirms the lack if impact of the vague prior and shows this Bayesian analysis is dominated by the observed data.
-
-\newpage
-
-```{r echo=FALSE,  message=FALSE, warning=FALSE, include=FALSE, results='hide'}
-knitr::opts_chunk$set(echo = FALSE)
-options(scipen = 1, digits = 3)
-pander::panderOptions('keep.trailing.zeros', TRUE)
-
-library(here)
-library(tidyverse)
-library(broom)
-library(cobalt)
-library(table1)
-library(knitr)
-library(patchwork)
-library(rstanarm)
-library(tidybayes)
-library(gt)
-
-```
-
-# Tables
-
-```{r}
+```{r cache=TRUE}
 df <- tibble(Trial = c("INCEPTION", "INCEPTION","ARREST", "ARREST", "PRAGUE", "PRAGUE"), Tx = c("CPR", "eCPR", "CPR", "eCPR", "CPR", "eCPR"),
              fail = c(52, 56, 15, 8, 108, 86),
              success = c(10,14, 0, 6,24,38 )) %>% 
   mutate(total = fail + success,
          prop_success = success / total) 
 df1 <- df[, c(1:4)]  %>% tidyr::pivot_wider(names_from = Tx, values_from = c(fail,success))
-
-
-knitr::kable(df1, caption = "Table 1 Extracted ITT trial data", col.names=c("Trial", "Fail CPR", "Fail eCPR", "Success CPR", "Success eCPR"))
-
 #frequentist INCEPTION  to reproduce NEJM result
 fit <- glm(prop_success ~ Tx, data = df[c(1:2),], family = binomial(link="logit"), weights = total)
 # summary(fit, digits=3)
 # print(c(exp(.262),exp(.262+c(-1,1)*1.96*.457)))
 # [1] 1.300 0.531 3.183
-```
 
-# Bayesian analysis 
-
-```{r cache=TRUE}
 # - INCEPTION alone default vague priors
 set.seed(1234)
 fit1 <- stan_glm(prop_success ~ Tx, data = df[c(1:2),], family = binomial(link="logit"), weights = total, refresh=0) #stan_glm with combined prior
@@ -197,88 +181,18 @@ fig_prob <- sum(tt$TxeCPR>0)/nrow(tt)
 # get_variables(fit1)
 # prior_summary(fit1)
 # help('prior_summary.stanreg') 
+fig_prob_1.1 <- sum(tt$TxeCPR>0.0953)/nrow(tt) # OR >1.1 (log (1.1) = 0.0953)
+# [1] 0.657
 
-
-#################
-# function to calculate point estimate, 95% CrI, and P(HR>1)
-# using prior information
-################
-eCRP_bayes <- function(data, m_CPR, sd_CPR, m_eCPR, sd_eCPR ) {
-  set.seed(1234)
-  fit <- stan_glm(prop_success ~ Tx, data = data, family = binomial(link="logit"), weights = total, refresh=0,
-                  prior = normal(m_eCPR, sd_eCPR),
-                  prior_intercept = normal (m_CPR, sd_CPR))
-  fit_sum <- summary(fit, digits=3)
-  conf_95 <- c(exp(fit_sum[2]),exp(fit_sum[2]+c(-1,1)*1.96*fit_sum[10]))
-  tt <- fit %>%
-    spread_draws(`(Intercept)`, `TxeCPR`)
-  fig_prob <- sum(tt$TxeCPR>0)/nrow(tt)
-  fit_draws <- fit %>% tidybayes::tidy_draws() 
-  my_list <- list(fig_prob, conf_95, fit_draws)
-  return(my_list)
-}
-
-# combined_prior 
-# informative priors using 2 previous studies combined
-comb_m_CPR <- sum(df1[c(2,3),4]) / (sum(df1[c(2,3),4]) + sum(df1[c(2,3),2])) # proportion previous results for CPR
-comb_sd_CPR <- sqrt(comb_m_CPR*(1-comb_m_CPR))                               
-comb_m_eCPR <- sum(df1[c(2,3),5]) / (sum(df1[c(2,3),5]) + sum(df1[c(2,3),3])) # proportion previous results for eCPR
-comb_sd_eCPR <- sqrt(comb_m_eCPR*(1-comb_m_eCPR))
-comb_prior <- eCRP_bayes(df[c(1:2),], comb_m_CPR, comb_sd_CPR, comb_m_eCPR, comb_sd_eCPR) #stan_glm with combined prior
-
-# enthusiastic prior with only ARREST study
-enth_m_CPR <- sum(df1[c(2),4]) + 1 / (sum(df1[c(2),4]) + sum(df1[c(2),2])) # proportion previous results for CPR, + 0.5 to avoid 0 cell
-enth_sd_CPR <- sqrt(enth_m_CPR*(1-enth_m_CPR))
-enth_m_eCPR <- sum(df1[c(2),5]) / (sum(df1[c(2),5]) + sum(df1[c(2),3])) # proportion previous results for eCPR
-enth_sd_eCPR <- sqrt(enth_m_eCPR*(1-enth_m_eCPR))
-enth_prior <- eCRP_bayes(df[c(1:2),], enth_m_CPR, enth_sd_CPR, enth_m_eCPR, enth_sd_eCPR) #stan_glm with enthusiastic prior
-
-# skeptical prior with only PRAGUE study
-skep_m_CPR <- sum(df1[c(3),4])  / (sum(df1[c(3),4]) + sum(df1[c(3),2])) # proportion previous results for CPR
-skep_sd_CPR <- sqrt(skep_m_CPR*(1-skep_m_CPR))
-skep_m_eCPR <- sum(df1[c(3),5]) / (sum(df1[c(3),5]) + sum(df1[c(3),3])) # proportion previous results for eCPR
-skep_sd_eCPR <- sqrt(skep_m_eCPR*(1-skep_m_eCPR))
-skep_prior <- eCRP_bayes(df[c(1:2),], skep_m_CPR, skep_sd_CPR, skep_m_eCPR, skep_sd_eCPR) #stan_glm with skeptical prior
-
-# skep_prior <- eCRP_bayes(df[c(1:2),], enth_m_CPR, enth_sd_CPR, skep_m_eCPR, skep_sd_eCPR) #test to see impact of enth intercept
-
-
-table_tbl <- 
-  tibble(
-    prior = c("vague", "combined", "enthusiastic", "skeptical"),
-    pt_est <- c(conf_95[1], comb_prior[[2]][1], enth_prior[[2]][1], skep_prior[[2]][1]),
-    llimit <- c(conf_95[2], comb_prior[[2]][2], enth_prior[[2]][2], skep_prior[[2]][2]),
-    ulimit <- c(conf_95[3], comb_prior[[2]][3], enth_prior[[2]][3], skep_prior[[2]][3]),
-    p.gt.1 <- c(fig_prob, comb_prior[1], enth_prior[1], skep_prior[1])
-  )
-
-gt(table_tbl) %>%
-  tab_stubhead(label = "Priors") 
 ```
 
-# **Summary of what I don't understand**
+ITT data from the INCEPTION trial[@CPR2023a] and two other pertinent trials[@RN6751;@RN6759] that also randomized CPR to eCPR are shown in Table 1. Performing a Bayesian analysis on the INCEPTION trial, using the default vague prior, produces an odds ratio (OR) 1.32 (95% Credible Interval (CrI) 0.54 - 3.22). The closeness of this result to the original analysis (OR, 1.4; 95% CI 0.5 - 3.5) confirms no impact of the vague prior and shows this Bayesian analysis is completely dominated by the observed INCEPTION data.  
 
-This makes only partial sense. 95% CrI are narrower with informative priors. OK, but one would think the enthusiastic prior from a trial ARREST that was stopped prematurely for benefit 6/15 vs 0/14 successes for eCPR vs CPR would shift the HR of 1.32 to the right but instead the HR falls to have a 1.27. The skeptical prior from PRAGUE which was stopped for futility (38/124 vs 24/132) does shift HR down 1.25 as expected    
+One of the advantages of a Bayesian approach is the ability to make direct probability statements about the estimand of improved survival with eCPR. The eCPR probability density function for improved survival from INCEPTION data with the default vague prior is displayed in Figure 1 and reveals that the probability of enhanced survival with eCPR is `r round(fig_prob*100,2)`%. The probability that the improved survival exceeds a 10% improvement is `r round(fig_prob_1.1,2)`%.    
 
-So enthusiastic priors - intercept N(.03,.18), Tx N(0.429,0.495)    
-skeptical prior - intercept N(.182,.386), Tx N(0.306,0.461)     
-
-Tx for enthusiastic prior > Tx skeptical prior (eCPR) but this seems to be offset by the reverse occurring for the intercept (CPR).     
-The problem seems to be in how comparable are these previous RCTs as the baseline success for the standard TX (CRP) is radically different 0/14 vs 24/132.    
-
-When I use a prior that uses the enthusiastic intercept prior and the skeptical Tx prior, I  get a bigger downward shift with HR 1.220 95% CrI(0.678 2.194) and P>1 74.5%
-
-Can you see any other explanation?    
-
-Do you have any other insights?
-
-Update 2023/02/07
-Might make most sense to interpret the INCEPTION trial based on the baseline CPR risk observed in that trial and provide informative priors only for the Tx variable (enthusiastic from ARREST, skeptical from PRAGUE)
-
-# Bayesian prior analysis #2
-```{r}
-## try re-running using prior for eCPR from different studies but leaving CPR with vague prior since baseline risks with CPR seem to vary
-## widely btw the different studies
+```{r priors, cache=TRUE}
+## running using prior for eCPR from different studies but leaving CPR with vague prior and INCEPTION data since baseline risks with CPR seem 
+## to vary widely btw the different studies
 
 eCRP_bayes_no_intercept_prior <- function(data, m_eCPR, sd_eCPR ) {
   set.seed(1234)
@@ -294,53 +208,136 @@ eCRP_bayes_no_intercept_prior <- function(data, m_eCPR, sd_eCPR ) {
   return(my_list)
 }
 
+# combined_prior 
+# informative priors using 2 previous studies combined
+comb_m_CPR <- sum(df1[c(2,3),4]) / (sum(df1[c(2,3),4]) + sum(df1[c(2,3),2])) # proportion previous results for CPR
+comb_sd_CPR <- sqrt(comb_m_CPR*(1-comb_m_CPR))                               
+comb_m_eCPR <- sum(df1[c(2,3),5]) / (sum(df1[c(2,3),5]) + sum(df1[c(2,3),3])) # proportion previous results for eCPR
+comb_sd_eCPR <- sqrt(comb_m_eCPR*(1-comb_m_eCPR)) #sd
+
+# enthusiastic prior with only ARREST study
+enth_m_CPR <- sum(df1[c(2),4]) + 1 / (sum(df1[c(2),4]) + sum(df1[c(2),2])) # proportion previous results for CPR, + 0.5 to avoid 0 cell
+enth_sd_CPR <- sqrt(enth_m_CPR*(1-enth_m_CPR))
+enth_m_eCPR <- sum(df1[c(2),5]) / (sum(df1[c(2),5]) + sum(df1[c(2),3])) # proportion previous results for eCPR
+enth_sd_eCPR <- sqrt(enth_m_eCPR*(1-enth_m_eCPR)) # sd
+
+# skeptical prior with only PRAGUE study
+skep_m_CPR <- sum(df1[c(3),4])  / (sum(df1[c(3),4]) + sum(df1[c(3),2])) # proportion previous results for CPR
+skep_sd_CPR <- sqrt(skep_m_CPR*(1-skep_m_CPR))
+skep_m_eCPR <- sum(df1[c(3),5]) / (sum(df1[c(3),5]) + sum(df1[c(3),3])) # proportion previous results for eCPR
+skep_sd_eCPR <- sqrt(skep_m_eCPR*(1-skep_m_eCPR)) #sd
+
 comb_prior1 <-eCRP_bayes_no_intercept_prior(df[c(1:2),], comb_m_eCPR, comb_sd_eCPR) #stan_glm with combined prior
 enth_prior1 <- eCRP_bayes_no_intercept_prior(df[c(1:2),], enth_m_eCPR, enth_sd_eCPR) #stan_glm with enthusiastic prior
 skep_prior1 <- eCRP_bayes_no_intercept_prior(df[c(1:2),], skep_m_eCPR, skep_sd_eCPR) #stan_glm with skeptical prior
 
-table_tbl_1 <- 
-  tibble(
-    prior = c("vague", "combined", "enthusiastic", "skeptical"),
-    pt_est <- c(conf_95[1], comb_prior1[[2]][1], enth_prior1[[2]][1], skep_prior1[[2]][1]),
-    llimit <- c(conf_95[2], comb_prior1[[2]][2], enth_prior1[[2]][2], skep_prior1[[2]][2]),
-    ulimit <- c(conf_95[3], comb_prior1[[2]][3], enth_prior1[[2]][3], skep_prior1[[2]][3]),
-    p.gt.1 <- c(fig_prob, comb_prior[1], enth_prior[1], skep_prior[1])
-  )
+# >OR 1.1
+comb_prob_1.1 <- sum(comb_prior1[[3]]$TxeCPR > 0.0953) / nrow(comb_prior1[[3]]) # OR >1.1 (log (1.1) = 0.0953) = 0.732
+enth_prob_1.1 <- sum(enth_prior1[[3]]$TxeCPR > 0.0953) / nrow(enth_prior1[[3]]) # OR >1.1 (log (1.1) = 0.0953) = 0.77
+skep_prob_1.1 <- sum(skep_prior1[[3]]$TxeCPR > 0.0953) / nrow(skep_prior1[[3]]) # OR >1.1 (log (1.1) = 0.0953) = 0.71
 
-gt(table_tbl_1) %>%
-  tab_stubhead(label = "Priors") 
+
 ```
 
-This seems like a reasonable solution
+Another advantage of a Bayesian approach is the possibility of including previous evidence as informed priors. We considered three possible scenarios i) using all the available prior RCT data[@RN6751;@RN6759] to create a combined prior which was expressed as a N(`r round(comb_m_eCPR,2)`, `r round(comb_sd_eCPR,2)`)    
+ii) using only the ARREST data, labelled an enthusiastic prior, as this trial was stopped prematurely for efficacy, expressed as a N(`r round(enth_m_eCPR,2)`, `r round(enth_sd_eCPR,2)`)    
+iii) using only the PRAGUE data, labelled a skeptical prior, as this trial was stopped prematurely for futility, expressed as a N(`r round(skep_m_eCPR,2)`, `r round(skep_sd_eCPR,2)`)    
+
+These different prior probabilities can be updated using the INCEPTION to create posterior distributions that are summarized in Table 2. Basically, it is observed that in all cases the point estimate for the enhanced eCPR survival remains fairly constant but the associated uncertainty is reduced with the additional data as reflected by the narrower 95% CrI. The posterior probability of improved eCPR survival goes from 80% with a skeptical prior to 85% with the enthusiastic prior.
+
+
+
+\newpage
+
+# Tables
+
+```{r}
+# knitr::kable(df1, caption = "Table 1 Extracted ITT trial data", col.names=c("Trial", "Fail CPR", "Fail eCPR", "Success CPR", "Success eCPR"))
+
+gt(df1) %>%
+  tab_header(
+    title = "Table 1 Extracted ITT trial data"
+  ) %>%
+  cols_label(
+    Trial = html("Trial"),
+    fail_CPR = html("Fail CPR (n)"),
+    fail_eCPR = html("Fail eCPR (n)"),
+    success_CPR = html("Success CPR (n)"),
+    success_eCPR = html("Success eCPR (n)"),
+  ) %>%
+  tab_style(style = cell_text(align = 'center'), locations = cells_column_labels()) %>%
+  cols_align(
+  align = c("center"),
+  columns = c(fail_CPR, fail_eCPR, success_CPR, success_eCPR )
+  ) %>%
+  tab_source_note(
+    source_note = "eCPR = extracorporeal cardiopulmonary resuscitation"
+  ) 
+
+table_tbl_2 <- 
+  tibble(
+    prior = c("Vague", "Combined", "Enthusiastic", "Skeptical"),
+    pt_est = c(conf_95[1], comb_prior1[[2]][1], enth_prior1[[2]][1], skep_prior1[[2]][1]),
+    llimit = c(conf_95[2], comb_prior1[[2]][2], enth_prior1[[2]][2], skep_prior1[[2]][2]),
+    ulimit = c(conf_95[3], comb_prior1[[2]][3], enth_prior1[[2]][3], skep_prior1[[2]][3]),
+    p.gt.1 = c(fig_prob, comb_prior1[1], enth_prior1[1], skep_prior1[1])
+  )
+
+gt(table_tbl_2) %>%
+  tab_header(
+    title = "Table 2 Probabilities of improved survival with eCPR with various priors"
+  ) %>%
+  tab_source_note(
+    source_note = "Vague: default vague prior"
+  ) %>%
+  tab_source_note(
+    source_note = "Combined: prior eCPR data from ARREST + PRAGUE"
+  ) %>%
+  tab_source_note(
+    source_note = md("Enthusiastic: prior eCPR data from ARREST alone")
+  ) %>%
+  tab_source_note(
+    source_note = md("Skeptical: prior eCPR data from PRAGUE alone")
+  ) %>%
+  tab_spanner(
+    label = "Priors",
+    columns = c(prior)
+   ) %>%
+  tab_spanner(
+    label = "OR",
+    columns = c(pt_est)
+  ) %>%
+  tab_spanner(
+    label = "Probability",
+    columns = c(p.gt.1)
+   ) %>%
+  tab_spanner(
+    label = "95% CrI",
+    columns = c(llimit, ulimit)
+  ) %>%
+  cols_label(
+    prior = html(""),
+    pt_est = html("point estimate"),
+    llimit = html("lower limit"),
+    ulimit = html("upper limit"),
+    p.gt.1 = html("p(OR) >1 ")
+  ) %>%
+  tab_style(style = cell_text(align = 'center'), locations = cells_column_labels()) %>%
+  cols_align(
+  align = c("center"),
+  columns = c(pt_est, llimit, ulimit)
+)
+
+
+```
+
+\newpage
 
 # Figures
-
-```{r warning=FALSE, message=FALSE}
-
-#############
-# function to plot probability function
-#############
-
-plot_bayes <- function(data,text1,text2, fig_prob=.5){
-  annon <- paste0(text2, fig_prob*100, "%")
-  ggplot(data, aes(x = exp(TxeCPR),
-                   fill = after_stat(x > 1),
-                   slab_alpha = after_stat((x)))
-  ) +
-    ggdist::stat_halfeye() +
-    scale_x_continuous(name=text, limits=c(0, 4)) +
-    scale_y_continuous(name="Density") +
-    labs(title = text1) +
-    annotate(geom="text", x=2.75,y=.6, label = annon) +
-    theme_classic() +
-    theme(legend.position="none") 
-}
-
-#plot combined prior
-#text1 <-c("HR increased survival with extracorporeal CPR")
-#text2 <- c("Probability of increased survival \n(with intact neurological status) \nwith extracorporeal CPR >")
-#plot_bayes(comb_prior[[3]], text1, text2, comb_prior[[1]])
-
+    
+          
+          
+```{r fig1, warning=FALSE, message=FALSE, fig.width=8}
 
 fit1 %>% tidybayes::tidy_draws() |> 
   ggplot(aes(x = exp(TxeCPR),
@@ -350,12 +347,66 @@ fit1 %>% tidybayes::tidy_draws() |>
   ggdist::stat_halfeye() +
   scale_x_continuous(name="HR being alive with extracorporeal CPR", limits=c(0, 5)) +
   scale_y_continuous(name="Density") +
-  labs(title = "Figure 1 INCEPTION ITT analysis with vague prior") +
-  annotate(geom="text", x=2.75,y=.6, label = "Probability of increased survival \n(with intact neurological status) \nwith extracorporeal CPR = 72.7%") +
+  labs(title = "Figure 1 INCEPTION ITT analysis with vague prior", caption = "AUC to the right of vertical line at HR =1.1 = 65.7%") +
+  annotate(geom="text", x=2.75,y=.6, label = "Probability of increased survival \n(with intact neurological status) \nwith extracorporeal CPR = 72.7% \n(light turquoise area under the curve (AUC) \nto the right of HR=1)", hjust = 0) +
+  geom_segment(aes(x = 1.1, y = 0, xend = 1.1, yend = .90)) +
   theme_classic() +
   theme(legend.position="none") 
 
 
+
+```
+
+\newpage
+
+```{r fig2, warning=FALSE, message=FALSE, fig.height=15, fig.width=8}
+g1 <- comb_prior1[[3]]  %>% tidybayes::tidy_draws() |> 
+  ggplot(aes(x = exp(TxeCPR),
+             fill = after_stat(x > 1),
+             slab_alpha = after_stat((x)))
+  ) +
+  ggdist::stat_halfeye() +
+  scale_x_continuous(name="HR being alive with extracorporeal CPR", limits=c(0, 5)) +
+  scale_y_continuous(name="Density") +
+  labs(title = "Figure 2a INCEPTION ITT analysis with combined prior*", subtitle = "*data from ARREST and PRAGUE",
+       caption = "AUC to the right of vertical line at HR =1.1 = 73.2%") +
+  annotate(geom="text", x=2.0,y=.6, label = "Probability of increased survival \n(with intact neurological status) \nwith extracorporeal CPR = 81.2% \n(light turquoise area under the curve (AUC) \nto the right of HR=1)", hjust = 0) +
+  geom_segment(aes(x = 1.1, y = 0, xend = 1.1, yend = .86)) +
+  theme_classic() +
+  theme(legend.position="none") 
+
+g2 <- enth_prior1[[3]]  %>% tidybayes::tidy_draws() |> 
+  ggplot(aes(x = exp(TxeCPR),
+             fill = after_stat(x > 1),
+             slab_alpha = after_stat((x)))
+  ) +
+  ggdist::stat_halfeye() +
+  scale_x_continuous(name="HR being alive with extracorporeal CPR", limits=c(0, 5)) +
+  scale_y_continuous(name="Density") +
+  labs(title = "Figure 2b INCEPTION ITT analysis with enthusiastic prior*", subtitle = "*data from ARREST alone",
+       caption = "AUC to the right of vertical line at HR =1.1 = 77.0%") +
+  annotate(geom="text", x=2.0,y=.6, label = "Probability of increased survival \n(with intact neurological status) \nwith extracorporeal CPR = 84.9% \n(light turquoise area under the curve (AUC) \nto the right of HR=1)", hjust = 0) +
+  geom_segment(aes(x = 1.1, y = 0, xend = 1.1, yend = .77)) +
+  theme_classic() +
+  theme(legend.position="none") 
+
+g3 <- skep_prior1[[3]]  %>% tidybayes::tidy_draws() |> 
+  ggplot(aes(x = exp(TxeCPR),
+             fill = after_stat(x > 1),
+             slab_alpha = after_stat((x)))
+  ) +
+  ggdist::stat_halfeye() +
+  scale_x_continuous(name="HR being alive with extracorporeal CPR", limits=c(0, 5)) +
+  scale_y_continuous(name="Density") +
+  labs(title = "Figure 2c INCEPTION ITT analysis with skeptical prior*", subtitle = "*data from PRAGUE alone",
+       caption = "AUC to the right of vertical line at HR =1.1 = 71.0%") +
+  annotate(geom="text", x=2.0,y=.6, label = "Probability of increased survival \n(with intact neurological status) \nwith extracorporeal CPR = 80.4% \n(light turquoise area under the curve (AUC) \nto the right of HR=1)", hjust = 0) +
+  geom_segment(aes(x = 1.1, y = 0, xend = 1.1, yend = .88)) +
+  theme_classic() +
+  theme(legend.position="none") 
+
+g1 / g2 / g3 +
+  plot_annotation(title = 'Figure 2. Probability density plots with informative priors')
 
 ```
 
