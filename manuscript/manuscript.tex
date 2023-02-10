@@ -187,7 +187,7 @@ additional insights into the interpretation of this trial.
     Bayesian statistics
 \end{keyword}
 \end{frontmatter}
-    \ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, borderline west={3pt}{0pt}{shadecolor}, sharp corners, breakable, interior hidden, enhanced, frame hidden]}{\end{tcolorbox}}\fi
+    \ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[interior hidden, frame hidden, borderline west={3pt}{0pt}{shadecolor}, enhanced, boxrule=0pt, breakable, sharp corners]}{\end{tcolorbox}}\fi
 
 \hypertarget{introduction}{%
 \section{Introduction}\label{introduction}}
@@ -334,12 +334,23 @@ trial was stopped prematurely for futility, expressed as a N(0.31, 0.46)
 
 These different prior probabilities can be updated using the INCEPTION
 to create posterior distributions that are summarized in Table 2.
-Basically, it is observed that in all cases the point estimate for the
-enhanced eCPR survival remains fairly constant but the associated
-uncertainty is reduced with the additional data as reflected by the
-narrower 95\% CrI. The posterior probability of improved eCPR survival
-goes from 80\% with a skeptical prior to 85\% with the enthusiastic
-prior.
+Basically, in all cases the point estimate for the enhanced eCPR
+survival remains fairly constant but the associated uncertainty is
+reduced with the additional data as reflected by the narrower 95\% CrI.
+The posterior probability of improved eCPR survival goes from 80\% with
+a skeptical prior to 85\% with the enthusiastic prior. The graphical
+presentation of these results is shown in Figure 2.
+
+Although INCEPTION did not report a per-protocol analysis, just an
+analysis may be revealing concerning treatment efficacy, at the risk of
+an increased risk of bias by not respecting the ITT. From INCEPTION
+Figure S4\citep{CPR2023a}, it appears that the per protocol data for
+mortality is 13 survivors from 61 patients in the CPR group compared to
+5 survivors from 46 patients receiving eCPR. With a vague prior, the
+probability of increased survival with eCPR is decreased compared to CPR
+but with wide CrI (OR 0.45, 95\% CrI 1.5 - 1.35), limiting any
+definitive conclusions. The probabilities of increased eCPR survival
+incorporating the previous identified priors is shown in Table 3.
 
 \newpage
 
@@ -364,19 +375,19 @@ eCPR = extracorporeal cardiopulmonary resuscitation\\
 \end{minipage}
 
 \setlength{\LTpost}{0mm}
-\begin{longtable}{lcccc}
+\begin{longtable}{lccccr}
 \caption*{
-{\large Table 2 Probabilities of improved survival with eCPR with various priors}
+{\large Table 2 eCPR odds ratios, 95\% credible intervals and probabilities with various priors}
 } \\ 
 \toprule
-Priors & OR & \multicolumn{2}{c}{95\% CrI} & Probability \\ 
-\cmidrule(lr){1-1} \cmidrule(lr){2-2} \cmidrule(lr){3-4} \cmidrule(lr){5-5}
- & point estimate & lower limit & upper limit & p(OR) >1  \\ 
+Priors & OR & \multicolumn{2}{c}{95\% CrI} & \multicolumn{2}{c}{Probabilities} \\ 
+\cmidrule(lr){1-1} \cmidrule(lr){2-2} \cmidrule(lr){3-4} \cmidrule(lr){5-6}
+ & point estimate & lower limit & upper limit & p(OR) >1  &  p(ROPE) \\ 
 \midrule
-Vague & 1.32 & 0.543 & 3.21 & 0.727 \\ 
-Combined & 1.35 & 0.705 & 2.58 & 0.817 \\ 
-Enthusiastic & 1.40 & 0.738 & 2.67 & 0.849 \\ 
-Skeptical & 1.32 & 0.700 & 2.50 & 0.804 \\ 
+Vague & 1.32 & 0.543 & 3.21 & 0.727 & 0.134 \\ 
+Combined & 1.35 & 0.705 & 2.58 & 0.817 & 0.153 \\ 
+Enthusiastic & 1.40 & 0.738 & 2.67 & 0.849 & 0.138 \\ 
+Skeptical & 1.32 & 0.700 & 2.50 & 0.804 & 0.168 \\ 
 \bottomrule
 \end{longtable}
 \begin{minipage}{\linewidth}
@@ -384,6 +395,31 @@ Vague: default vague prior\\
 Combined: prior eCPR data from ARREST + PRAGUE\\
 Enthusiastic: prior eCPR data from ARREST alone\\
 Skeptical: prior eCPR data from PRAGUE alone\\
+ROPE: range of practical equivalence = + / - 10\% OR (odds ratio)\\
+\end{minipage}
+
+\setlength{\LTpost}{0mm}
+\begin{longtable}{lccccr}
+\caption*{
+{\large Table 3 eCPR (per protocol) odds ratios, 95\% credible intervals and probabilities with various priors}
+} \\ 
+\toprule
+Priors & OR & \multicolumn{2}{c}{95\% CrI} & \multicolumn{2}{c}{Probabilities} \\ 
+\cmidrule(lr){1-1} \cmidrule(lr){2-2} \cmidrule(lr){3-4} \cmidrule(lr){5-6}
+ & point estimate & lower limit & upper limit & p(OR) >1  &  p(ROPE) \\ 
+\midrule
+Vague & 0.451 & 0.151 & 1.35 & 0.0698 & 0.0473 \\ 
+Combined & 0.859 & 0.430 & 1.71 & 0.33 & 0.2022 \\ 
+Enthusiastic & 0.870 & 0.437 & 1.73 & 0.345 & 0.2013 \\ 
+Skeptical & 0.858 & 0.419 & 1.75 & 0.327 & 0.1970 \\ 
+\bottomrule
+\end{longtable}
+\begin{minipage}{\linewidth}
+Vague: default vague prior\\
+Combined: prior eCPR data from ARREST + PRAGUE\\
+Enthusiastic: prior eCPR data from ARREST alone\\
+Skeptical: prior eCPR data from PRAGUE alone\\
+ROPE: range of practical equivalence = + / - 10\% OR (odds ratio)\\
 \end{minipage}
 
 \newpage

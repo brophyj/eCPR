@@ -181,9 +181,16 @@ fig_prob <- sum(tt$TxeCPR>0)/nrow(tt)
 # get_variables(fit1)
 # prior_summary(fit1)
 # help('prior_summary.stanreg') 
-fig_prob_1.1 <- sum(tt$TxeCPR>0.0953)/nrow(tt) # OR >1.1 (log (1.1) = 0.0953)
+# P > 1.1
+fig_prob_1.1 <- sum(tt$TxeCPR > 0.0953)/nrow(tt) # OR >1.1 (log (1.1) = 0.0953)
 # [1] 0.657
 
+# P > 1/1.1
+fig_prob_1.1.1 <- sum(tt$TxeCPR > -0.0954)/nrow(tt) # OR > 1 / 1.1 (log (0.909) = -0.0954) = 0.791
+
+# difference equivalence 
+
+vague_eq <- fig_prob_1.1.1 - fig_prob_1.1
 ```
 
 ITT data from the INCEPTION trial[@CPR2023a] and two other pertinent trials[@RN6751;@RN6759] that also randomized CPR to eCPR are shown in Table 1. Performing a Bayesian analysis on the INCEPTION trial, using the default vague prior, produces an odds ratio (OR) 1.32 (95% Credible Interval (CrI) 0.54 - 3.22). The closeness of this result to the original analysis (OR, 1.4; 95% CI 0.5 - 3.5) confirms no impact of the vague prior and shows this Bayesian analysis is completely dominated by the observed INCEPTION data.  
@@ -236,14 +243,74 @@ comb_prob_1.1 <- sum(comb_prior1[[3]]$TxeCPR > 0.0953) / nrow(comb_prior1[[3]]) 
 enth_prob_1.1 <- sum(enth_prior1[[3]]$TxeCPR > 0.0953) / nrow(enth_prior1[[3]]) # OR >1.1 (log (1.1) = 0.0953) = 0.77
 skep_prob_1.1 <- sum(skep_prior1[[3]]$TxeCPR > 0.0953) / nrow(skep_prior1[[3]]) # OR >1.1 (log (1.1) = 0.0953) = 0.71
 
+# > OR 1/ 1.1 (0.909)
+comb_prob_1.1.1 <- sum(comb_prior1[[3]]$TxeCPR > -0.0954) / nrow(comb_prior1[[3]]) # OR > 1 / 1.1 (log (0.909) = -0.0954) = 0.884
+enth_prob_1.1.1 <- sum(enth_prior1[[3]]$TxeCPR > -0.0954) / nrow(enth_prior1[[3]]) # OR >1 / 1.1 (log (0.909) = -0.0954) = 0.908
+skep_prob_1.1.1 <- sum(skep_prior1[[3]]$TxeCPR > -0.0954) / nrow(skep_prior1[[3]]) # OR >1 / 1.1 (log (0.909) = -0.0954) = 0.878
 
+# equivalence +/- 10%
+comb_eq <- comb_prob_1.1.1 - comb_prob_1.1 
+enth_eq <- enth_prob_1.1.1 - enth_prob_1.1
+skep_eq <- skep_prob_1.1.1 - skep_prob_1.1
 ```
 
 Another advantage of a Bayesian approach is the possibility of including previous evidence as informed priors. We considered three possible scenarios i) using all the available prior RCT data[@RN6751;@RN6759] to create a combined prior which was expressed as a N(`r round(comb_m_eCPR,2)`, `r round(comb_sd_eCPR,2)`)    
 ii) using only the ARREST data, labelled an enthusiastic prior, as this trial was stopped prematurely for efficacy, expressed as a N(`r round(enth_m_eCPR,2)`, `r round(enth_sd_eCPR,2)`)    
 iii) using only the PRAGUE data, labelled a skeptical prior, as this trial was stopped prematurely for futility, expressed as a N(`r round(skep_m_eCPR,2)`, `r round(skep_sd_eCPR,2)`)    
 
-These different prior probabilities can be updated using the INCEPTION to create posterior distributions that are summarized in Table 2. Basically, it is observed that in all cases the point estimate for the enhanced eCPR survival remains fairly constant but the associated uncertainty is reduced with the additional data as reflected by the narrower 95% CrI. The posterior probability of improved eCPR survival goes from 80% with a skeptical prior to 85% with the enthusiastic prior.
+These different prior probabilities can be updated using the INCEPTION to create posterior distributions that are summarized in Table 2. Basically, in all cases the point estimate for the enhanced eCPR survival remains fairly constant but the associated uncertainty is reduced with the additional data as reflected by the narrower 95% CrI. The posterior probability of improved eCPR survival goes from 80% with a skeptical prior to 85% with the enthusiastic prior. The graphical presentation of these results is shown in Figure 2.    
+
+Although INCEPTION did not report a per-protocol analysis, just an analysis may be revealing concerning treatment efficacy, at the risk of an increased risk of bias by not respecting the ITT. From INCEPTION Figure S4[@CPR2023a], it appears that the per protocol data for mortality is 13 survivors from 61 patients in the CPR group compared to 5 survivors from 46 patients receiving eCPR. With a vague prior, the probability of increased survival with eCPR is decreased compared to CPR but with wide CrI (OR 0.45, 95% CrI 1.5 - 1.35), limiting any definitive conclusions. The probabilities of increased eCPR survival incorporating the previous identified priors is shown in Table 3.
+
+```{r PP, cache=TRUE}
+# per protocol - only data for INCEPTION, other data just placeholder if PP data becomes available
+df_pp <- tibble(Trial = c("INCEPTION", "INCEPTION","ARREST", "ARREST", "PRAGUE", "PRAGUE"), Tx = c("CPR", "eCPR", "CPR", "eCPR", "CPR", "eCPR"),
+             fail = c(48, 41, 15, 8, 108, 86),
+             success = c(13,5, 0, 6,24,38 )) %>% 
+  mutate(total = fail + success,
+         prop_success = success / total) 
+
+# df_pp[c(1:2),] data set used for PP analyses
+
+set.seed(1234)
+fit1_pp <- stan_glm(prop_success ~ Tx, data = df_pp[c(1:2),], family = binomial(link="logit"), weights = total, refresh=0) #stan_glm with combined prior
+fit1_pp_sum <- summary(fit1_pp, digits=3)
+conf_95_pp <- c(exp(fit1_pp_sum[2]),exp(fit1_pp_sum[2]+c(-1,1)*1.96*fit1_pp_sum[10]))
+tt_pp <- fit1_pp %>%
+    spread_draws(`(Intercept)`, `TxeCPR`)
+fig_prob_pp <- sum(tt_pp$TxeCPR>0)/nrow(tt_pp)
+# summary(fit1, digits=3)
+# print(c(exp(.2785),exp(.2785+c(-1,1)*1.96*.4537)))
+# get_variables(fit1)
+# prior_summary(fit1)
+# help('prior_summary.stanreg') 
+fig_prob_1.1_pp <- sum(tt_pp$TxeCPR>0.0953)/nrow(tt_pp) #
+fig_prob_1.1.1_pp <- sum(tt_pp$TxeCPR>-0.0954)/nrow(tt_pp) 
+
+
+comb_prior1_pp <-eCRP_bayes_no_intercept_prior(df_pp[c(1:2),], comb_m_eCPR, comb_sd_eCPR) #stan_glm with combined prior
+enth_prior1_pp <- eCRP_bayes_no_intercept_prior(df_pp[c(1:2),], enth_m_eCPR, enth_sd_eCPR) #stan_glm with enthusiastic prior
+skep_prior1_pp <- eCRP_bayes_no_intercept_prior(df_pp[c(1:2),], skep_m_eCPR, skep_sd_eCPR) #stan_glm with skeptical prior
+
+# >OR 1.1
+comb_prob_pp_1.1 <- sum(comb_prior1_pp[[3]]$TxeCPR > 0.0953) / nrow(comb_prior1_pp[[3]]) # OR >1.1 (log (1.1) = 0.0953) = 0.732
+enth_prob_pp_1.1 <- sum(enth_prior1_pp[[3]]$TxeCPR > 0.0953) / nrow(enth_prior1_pp[[3]]) # OR >1.1 (log (1.1) = 0.0953) = 0.77
+skep_prob_pp_1.1 <- sum(skep_prior1_pp[[3]]$TxeCPR > 0.0953) / nrow(skep_prior1_pp[[3]]) # OR >1.1 (log (1.1) = 0.0953) = 0.71
+
+# > OR 1/ 1.1 (0.909)
+comb_prob_pp_1.1.1 <- sum(comb_prior1_pp[[3]]$TxeCPR > -0.0954) / nrow(comb_prior1_pp[[3]]) # OR > 1 / 1.1 (log (0.909) = -0.0954) = 0.884
+enth_prob_pp_1.1.1 <- sum(enth_prior1_pp[[3]]$TxeCPR > -0.0954) / nrow(enth_prior1_pp[[3]]) # OR >1 / 1.1 (log (0.909) = -0.0954) = 0.908
+skep_prob_pp_1.1.1 <- sum(skep_prior1_pp[[3]]$TxeCPR > -0.0954) / nrow(skep_prior1_pp[[3]]) # OR >1 / 1.1 (log (0.909) = -0.0954) = 0.878
+
+# equivalence +/- 10%
+vague_eq_pp <- fig_prob_1.1.1_pp - fig_prob_1.1_pp
+comb_eq_pp <- comb_prob_pp_1.1.1 - comb_prob_pp_1.1
+enth_eq_pp <- enth_prob_pp_1.1.1 - enth_prob_pp_1.1
+skep_eq_pp <- skep_prob_pp_1.1.1 - skep_prob_pp_1.1
+
+
+```
+
 
 
 
@@ -274,18 +341,21 @@ gt(df1) %>%
     source_note = "eCPR = extracorporeal cardiopulmonary resuscitation"
   ) 
 
+## Table 2
+
 table_tbl_2 <- 
   tibble(
     prior = c("Vague", "Combined", "Enthusiastic", "Skeptical"),
     pt_est = c(conf_95[1], comb_prior1[[2]][1], enth_prior1[[2]][1], skep_prior1[[2]][1]),
     llimit = c(conf_95[2], comb_prior1[[2]][2], enth_prior1[[2]][2], skep_prior1[[2]][2]),
     ulimit = c(conf_95[3], comb_prior1[[2]][3], enth_prior1[[2]][3], skep_prior1[[2]][3]),
-    p.gt.1 = c(fig_prob, comb_prior1[1], enth_prior1[1], skep_prior1[1])
+    p.gt.1 = c(fig_prob, comb_prior1[1], enth_prior1[1], skep_prior1[1]),
+    p.eq   = c(vague_eq, comb_eq, enth_eq, skep_eq)
   )
 
 gt(table_tbl_2) %>%
   tab_header(
-    title = "Table 2 Probabilities of improved survival with eCPR with various priors"
+    title = "Table 2 eCPR odds ratios, 95% credible intervals and probabilities with various priors"
   ) %>%
   tab_source_note(
     source_note = "Vague: default vague prior"
@@ -299,6 +369,9 @@ gt(table_tbl_2) %>%
   tab_source_note(
     source_note = md("Skeptical: prior eCPR data from PRAGUE alone")
   ) %>%
+  tab_source_note(
+    source_note = md("ROPE: range of practical equivalence = + / - 10% OR (odds ratio)")
+  ) %>%
   tab_spanner(
     label = "Priors",
     columns = c(prior)
@@ -308,8 +381,8 @@ gt(table_tbl_2) %>%
     columns = c(pt_est)
   ) %>%
   tab_spanner(
-    label = "Probability",
-    columns = c(p.gt.1)
+    label = "Probabilities",
+    columns = c(p.gt.1, p.eq)
    ) %>%
   tab_spanner(
     label = "95% CrI",
@@ -320,7 +393,8 @@ gt(table_tbl_2) %>%
     pt_est = html("point estimate"),
     llimit = html("lower limit"),
     ulimit = html("upper limit"),
-    p.gt.1 = html("p(OR) >1 ")
+    p.gt.1 = html("p(OR) >1 "),
+    p.eq   = html(" p(ROPE)")
   ) %>%
   tab_style(style = cell_text(align = 'center'), locations = cells_column_labels()) %>%
   cols_align(
@@ -328,6 +402,67 @@ gt(table_tbl_2) %>%
   columns = c(pt_est, llimit, ulimit)
 )
 
+## Table 3
+
+table_tbl_3 <- 
+  tibble(
+    prior = c("Vague", "Combined", "Enthusiastic", "Skeptical"),
+    pt_est = c(conf_95_pp[1], comb_prior1_pp[[2]][1], enth_prior1_pp[[2]][1], skep_prior1_pp[[2]][1]),
+    llimit = c(conf_95_pp[2], comb_prior1_pp[[2]][2], enth_prior1_pp[[2]][2], skep_prior1_pp[[2]][2]),
+    ulimit = c(conf_95_pp[3], comb_prior1_pp[[2]][3], enth_prior1_pp[[2]][3], skep_prior1_pp[[2]][3]),
+    p.gt.1 = c(fig_prob_pp, comb_prior1_pp[1], enth_prior1_pp[1], skep_prior1_pp[1]),
+    p.eq   = c(vague_eq_pp, comb_eq_pp, enth_eq_pp, skep_eq_pp)
+  )
+ 
+
+gt(table_tbl_3) %>%
+  tab_header(
+    title = "Table 3 eCPR (per protocol) odds ratios, 95% credible intervals and probabilities with various priors"
+  ) %>%
+  tab_source_note(
+    source_note = "Vague: default vague prior"
+  ) %>%
+  tab_source_note(
+    source_note = "Combined: prior eCPR data from ARREST + PRAGUE"
+  ) %>%
+  tab_source_note(
+    source_note = md("Enthusiastic: prior eCPR data from ARREST alone")
+  ) %>%
+  tab_source_note(
+    source_note = md("Skeptical: prior eCPR data from PRAGUE alone")
+  ) %>%
+  tab_source_note(
+    source_note = md("ROPE: range of practical equivalence = + / - 10% OR (odds ratio)")
+  ) %>%
+  tab_spanner(
+    label = "Priors",
+    columns = c(prior)
+   ) %>%
+  tab_spanner(
+    label = "OR",
+    columns = c(pt_est)
+  ) %>%
+  tab_spanner(
+    label = "Probabilities",
+    columns = c(p.gt.1, p.eq)
+   ) %>%
+  tab_spanner(
+    label = "95% CrI",
+    columns = c(llimit, ulimit)
+  ) %>%
+  cols_label(
+    prior = html(""),
+    pt_est = html("point estimate"),
+    llimit = html("lower limit"),
+    ulimit = html("upper limit"),
+    p.gt.1 = html("p(OR) >1 "),
+    p.eq   = html(" p(ROPE)")
+  ) %>%
+  tab_style(style = cell_text(align = 'center'), locations = cells_column_labels()) %>%
+  cols_align(
+  align = c("center"),
+  columns = c(pt_est, llimit, ulimit)
+)
 
 ```
 
@@ -345,11 +480,13 @@ fit1 %>% tidybayes::tidy_draws() |>
              slab_alpha = after_stat((x)))
   ) +
   ggdist::stat_halfeye() +
-  scale_x_continuous(name="HR being alive with extracorporeal CPR", limits=c(0, 5)) +
+  scale_x_continuous(name="OR survival with extracorporeal CPR", limits=c(0, 5)) +
   scale_y_continuous(name="Density") +
   labs(title = "Figure 1 INCEPTION ITT analysis with vague prior", caption = "AUC to the right of vertical line at HR =1.1 = 65.7%") +
-  annotate(geom="text", x=2.75,y=.6, label = "Probability of increased survival \n(with intact neurological status) \nwith extracorporeal CPR = 72.7% \n(light turquoise area under the curve (AUC) \nto the right of HR=1)", hjust = 0) +
+  annotate(geom="text", x=2.0,y=.6, label = "Probability of increased survival \n(with intact neurological status) \nwith extracorporeal CPR = 72.7% \n(light turquoise area under the curve (AUC) \nto the right of HR=1)", hjust = 0) +
   geom_segment(aes(x = 1.1, y = 0, xend = 1.1, yend = .90)) +
+  geom_segment(aes(x = 1 / 1.1, y = 0, xend = 1 / 1.1, yend = .86)) +
+  annotate(geom="text", x=2.0,y=.45, label = "Probability (range) of practical equivalence (+/- 10% OR) \nAUC between 2 black vertical lines =13.4% ", hjust = 0) +
   theme_classic() +
   theme(legend.position="none") 
 
@@ -366,7 +503,7 @@ g1 <- comb_prior1[[3]]  %>% tidybayes::tidy_draws() |>
              slab_alpha = after_stat((x)))
   ) +
   ggdist::stat_halfeye() +
-  scale_x_continuous(name="HR being alive with extracorporeal CPR", limits=c(0, 5)) +
+  scale_x_continuous(name="OR survival with extracorporeal CPR", limits=c(0, 5)) +
   scale_y_continuous(name="Density") +
   labs(title = "Figure 2a INCEPTION ITT analysis with combined prior*", subtitle = "*data from ARREST and PRAGUE",
        caption = "AUC to the right of vertical line at HR =1.1 = 73.2%") +
@@ -381,7 +518,7 @@ g2 <- enth_prior1[[3]]  %>% tidybayes::tidy_draws() |>
              slab_alpha = after_stat((x)))
   ) +
   ggdist::stat_halfeye() +
-  scale_x_continuous(name="HR being alive with extracorporeal CPR", limits=c(0, 5)) +
+  scale_x_continuous(name="OR survival with extracorporeal CPR", limits=c(0, 5)) +
   scale_y_continuous(name="Density") +
   labs(title = "Figure 2b INCEPTION ITT analysis with enthusiastic prior*", subtitle = "*data from ARREST alone",
        caption = "AUC to the right of vertical line at HR =1.1 = 77.0%") +
@@ -396,7 +533,7 @@ g3 <- skep_prior1[[3]]  %>% tidybayes::tidy_draws() |>
              slab_alpha = after_stat((x)))
   ) +
   ggdist::stat_halfeye() +
-  scale_x_continuous(name="HR being alive with extracorporeal CPR", limits=c(0, 5)) +
+  scale_x_continuous(name="OR survival with extracorporeal CPR", limits=c(0, 5)) +
   scale_y_continuous(name="Density") +
   labs(title = "Figure 2c INCEPTION ITT analysis with skeptical prior*", subtitle = "*data from PRAGUE alone",
        caption = "AUC to the right of vertical line at HR =1.1 = 71.0%") +
