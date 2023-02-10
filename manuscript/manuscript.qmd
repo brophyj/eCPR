@@ -1,8 +1,8 @@
 ---
-title: Extracorporeal CPR for Refractory Out-of-Hospital Cardiac Arrest
-subtitle: A Bayesian Perspective
+title: A Bayesian Perspective 
+subtitle: Extracorporeal CPR for Refractory Out-of-Hospital Cardiac Arrest
 author:
-  - name: James M Brophy
+  - name: James M Brophy MD PhD
     email: james.brophy@mcgill.ca
     affiliations: 
         - id: McGill University 
@@ -16,7 +16,7 @@ author:
         corresponding: true
     note: JMB is a research scholar supported by Les Fonds de Recherche Québec Santé
 abstract: |
-  A recent randomized clinical trial reported in patients with refractory out-of-hospital cardiac arrest, extracorporeal CPR and conventional CPR had similar effects on survival with a favorable neurologic outcome. Herein, it is examined whether a Bayesian perspective allows any additional insights into the interpretation of this trial.
+  A recent randomized clinical trial, INCEPTION, reported patients with refractory out-of-hospital cardiac arrest, extracorporeal CPR (eCPR) and conventional CPR (cCPR) had similar effects on survival with a favorable neurologic outcome. The current study examines if a Bayesian perspective provides  additional insights. Depending on the prior selected, the Bayesian approach for the INCEPTION intention-to treat (ITT) analysis shows an equivalence probability between 13.4 - 16.8% (defined as 1 / 1.1 < odds ratio (OR) < 1.1). The probability of clinical superiority with eCPR ranges from 65.7 - 77.0 % (defined as OR > 1.1). A similar analyses using INCEPTION per protocol data shows an equivalence probability between 4.7 - 20.2% with reduced probabilities of clinical superiority of approximately 25%. It is concluded that a Bayesian perspective allows considerable additional insights into the trial analysis and interpretation. The substantial probabilities of increased survival, but with considerable residual uncertainties, suggests that additional studies are required before concluding that eCPR and cCPR have similar survival effects.
 keywords: 
   - extracorporeal CPR
   - Bayesian statistics
@@ -78,8 +78,8 @@ neurological outcome".[@CPR2023a]
 This communication does not reiterate the many reasons to be wary of
 null hypothesis significance testing (NHST), p values and confidence
 intervals[@RN5420]. Rather it assumes the reader has perhaps heard that
-Bayesian methods mirror our intuitive learning process and is curious
-about its potential application to RCT interpretations.
+Bayesian methods mirror our intuitive learning and diagnostic processes and is curious
+about its potential application to RCT analyses and interpretations.
 
 Therefore the goal of this communication is to examine whether a
 Bayesian perspective permits additional insights into the specific
@@ -133,22 +133,17 @@ As  baseline success rates for standard CPR varies markedly between the three st
 Posterior distributions are summarized with medians and 95%
 highest-density intervals (credible intervals), defined as the narrowest
 interval containing 95% of the probability density function
-[@mcelreath2020]. We not only calculated the posterior probability of
-any additional survival with eCPR (OR \>1.00), but also of clinically meaningful benefits
-(defined as OR \>1.10).     
+[@mcelreath2020]. Bayesian analyses permit not only calculated the posterior probability of
+any additional survival with eCPR (OR \>1.00), but also of clinically meaningful benefits. While there is no universal standard for a clinically meaningful benefit, a survival OR \>1.10 may be an acceptable threshold for many. Bayesian analyses also allows calculation of the probability between any two points. For example, rather than simply comparing if the survival of one treatment is better, one can calculate a range of practical equivalence (ROPE). While different ranges may be proposed as equivalent, +/- 10% seems a reasonable starting point.             
 
 ITT assesses subjects based on the group they were initially (and randomly) allocated
 to, regardless of whether or not they dropped out, were fully adhered to
 the treatment or switched to an alternative treatment. ITT analyses can
 therefore be seen as a conservative estimate which mirrors clinical
-effectiveness. In contrast, a per protocol (PP) analysis involves a
-comparison of treatment groups in a trial that includes only those
+effectiveness. In contrast, a per protocol (PP) analysis accounts for adherence by analyzing only those
 patients who completed the treatment they were originally allocated to.
-Similarly an "as treated" analysis considers only which treatments
-subjects received, regardless of their randomization status and protocol
-adherence. While both PP and as-treated analyses alone may lead to bias,
-in conjunction with an ITT analysis they may provide additional insights
-into efficacy and have also been examined from a Bayesian perspective.
+While PP may provide additional insights
+into efficacy, it is subject to bias. Since a PP analysis when performed in conjunction with an ITT analysis may provide additional insights, this has also been subjected to a Bayesian analysis.       
 
 All analyses were executed using `R`[@R]  within the integrated development environment
 of RStudio. Bayesian analyses were performed using the front end `rstanarm` package[@rstanarm] to the `Stan` programming language[stan]. The statistical code can be found on Github
@@ -193,9 +188,11 @@ fig_prob_1.1.1 <- sum(tt$TxeCPR > -0.0954)/nrow(tt) # OR > 1 / 1.1 (log (0.909) 
 vague_eq <- fig_prob_1.1.1 - fig_prob_1.1
 ```
 
-ITT data from the INCEPTION trial[@CPR2023a] and two other pertinent trials[@RN6751;@RN6759] that also randomized CPR to eCPR are shown in Table 1. Performing a Bayesian analysis on the INCEPTION trial, using the default vague prior, produces an odds ratio (OR) 1.32 (95% Credible Interval (CrI) 0.54 - 3.22). The closeness of this result to the original analysis (OR, 1.4; 95% CI 0.5 - 3.5) confirms no impact of the vague prior and shows this Bayesian analysis is completely dominated by the observed INCEPTION data.  
+ITT data from the INCEPTION trial[@CPR2023a] and two other pertinent trials[@RN6751;@RN6759] that also randomized CPR to eCPR are shown in Table 1. Performing a Bayesian analysis on the INCEPTION trial, using the default vague priors, produces an odds ratio (OR) 1.32 (95% Credible Interval (CrI) 0.54 - 3.22). The closeness of this result to the original analysis (OR, 1.4; 95% CI 0.5 - 3.5) confirms minimal impact of the vague prior and shows this Bayesian analysis is completely dominated by the observed INCEPTION data.  
 
-One of the advantages of a Bayesian approach is the ability to make direct probability statements about the estimand of improved survival with eCPR. The eCPR probability density function for improved survival from INCEPTION data with the default vague prior is displayed in Figure 1 and reveals that the probability of enhanced survival with eCPR is `r round(fig_prob*100,2)`%. The probability that the improved survival exceeds a 10% improvement is `r round(fig_prob_1.1,2)`%.    
+One of the advantages of a Bayesian approach is the ability to make direct probability statements about the estimand of improved survival with eCPR. The eCPR probability density function for improved survival from INCEPTION data with the default vague prior is displayed in Figure 1 and reveals that the probability of enhanced survival with eCPR is `r round(fig_prob*100,2)`%. The probability that the improved survival exceeds a 10% improvement is `r round(fig_prob_1.1,2)`%.   
+
+
 
 ```{r priors, cache=TRUE}
 ## running using prior for eCPR from different studies but leaving CPR with vague prior and INCEPTION data since baseline risks with CPR seem 
@@ -350,6 +347,7 @@ table_tbl_2 <-
     llimit = c(conf_95[2], comb_prior1[[2]][2], enth_prior1[[2]][2], skep_prior1[[2]][2]),
     ulimit = c(conf_95[3], comb_prior1[[2]][3], enth_prior1[[2]][3], skep_prior1[[2]][3]),
     p.gt.1 = c(fig_prob, comb_prior1[1], enth_prior1[1], skep_prior1[1]),
+    p.gt.1.1 = c(fig_prob_1.1, as.numeric(comb_prob_1.1), as.numeric(enth_prob_1.1), as.numeric(skep_prob_1.1)),
     p.eq   = c(vague_eq, comb_eq, enth_eq, skep_eq)
   )
 
@@ -382,7 +380,7 @@ gt(table_tbl_2) %>%
   ) %>%
   tab_spanner(
     label = "Probabilities",
-    columns = c(p.gt.1, p.eq)
+    columns = c(p.gt.1, p.gt.1.1, p.eq)
    ) %>%
   tab_spanner(
     label = "95% CrI",
@@ -394,12 +392,18 @@ gt(table_tbl_2) %>%
     llimit = html("lower limit"),
     ulimit = html("upper limit"),
     p.gt.1 = html("p(OR) >1 "),
+    p.gt.1.1 = html("p(OR) >1.1 "),
     p.eq   = html(" p(ROPE)")
   ) %>%
   tab_style(style = cell_text(align = 'center'), locations = cells_column_labels()) %>%
   cols_align(
   align = c("center"),
-  columns = c(pt_est, llimit, ulimit)
+  columns = c(pt_est, llimit, ulimit, p.gt.1.1, p.eq) 
+  ) %>%
+  fmt_number(
+    columns = c(pt_est, llimit, ulimit, p.gt.1.1),
+    decimals = 3,
+    drop_trailing_zeros = FALSE
 )
 
 ## Table 3
@@ -410,7 +414,8 @@ table_tbl_3 <-
     pt_est = c(conf_95_pp[1], comb_prior1_pp[[2]][1], enth_prior1_pp[[2]][1], skep_prior1_pp[[2]][1]),
     llimit = c(conf_95_pp[2], comb_prior1_pp[[2]][2], enth_prior1_pp[[2]][2], skep_prior1_pp[[2]][2]),
     ulimit = c(conf_95_pp[3], comb_prior1_pp[[2]][3], enth_prior1_pp[[2]][3], skep_prior1_pp[[2]][3]),
-    p.gt.1 = c(fig_prob_pp, comb_prior1_pp[1], enth_prior1_pp[1], skep_prior1_pp[1]),
+    p.gt.1 = c(fig_prob_pp, as.numeric(comb_prior1_pp[1]), as.numeric(enth_prior1_pp[1]), as.numeric(skep_prior1_pp[1])),
+    p.gt.1.1 = c(fig_prob_1.1_pp, as.numeric(comb_prob_pp_1.1), as.numeric(enth_prob_pp_1.1), as.numeric(skep_prob_pp_1.1)),
     p.eq   = c(vague_eq_pp, comb_eq_pp, enth_eq_pp, skep_eq_pp)
   )
  
@@ -444,7 +449,7 @@ gt(table_tbl_3) %>%
   ) %>%
   tab_spanner(
     label = "Probabilities",
-    columns = c(p.gt.1, p.eq)
+    columns = c(p.gt.1, p.gt.1.1, p.eq)
    ) %>%
   tab_spanner(
     label = "95% CrI",
@@ -456,12 +461,18 @@ gt(table_tbl_3) %>%
     llimit = html("lower limit"),
     ulimit = html("upper limit"),
     p.gt.1 = html("p(OR) >1 "),
+    p.gt.1.1 = html("p(OR) >1.1 "),
     p.eq   = html(" p(ROPE)")
   ) %>%
   tab_style(style = cell_text(align = 'center'), locations = cells_column_labels()) %>%
   cols_align(
   align = c("center"),
-  columns = c(pt_est, llimit, ulimit)
+  columns = c(pt_est, llimit, ulimit, p.gt.1, p.gt.1.1, p.eq)
+  ) %>%
+  fmt_number(
+    columns = c(pt_est, llimit, ulimit, p.gt.1, p.gt.1.1, p.eq) ,
+    decimals = 3,
+    drop_trailing_zeros = FALSE
 )
 
 ```
@@ -472,7 +483,7 @@ gt(table_tbl_3) %>%
     
           
           
-```{r fig1, warning=FALSE, message=FALSE, fig.width=8}
+```{r fig1, warning=FALSE, message=FALSE, fig.height=6}
 
 fit1 %>% tidybayes::tidy_draws() |> 
   ggplot(aes(x = exp(TxeCPR),
@@ -482,11 +493,11 @@ fit1 %>% tidybayes::tidy_draws() |>
   ggdist::stat_halfeye() +
   scale_x_continuous(name="OR survival with extracorporeal CPR", limits=c(0, 5)) +
   scale_y_continuous(name="Density") +
-  labs(title = "Figure 1 INCEPTION ITT analysis with vague prior", caption = "AUC to the right of vertical line at HR =1.1 = 65.7%") +
-  annotate(geom="text", x=2.0,y=.6, label = "Probability of increased survival \n(with intact neurological status) \nwith extracorporeal CPR = 72.7% \n(light turquoise area under the curve (AUC) \nto the right of HR=1)", hjust = 0) +
+  labs(title = "Figure 1 INCEPTION ITT analysis with vague prior", caption = "Clinical superiority = AUC to right of vertical line at HR = 1.1 = 65.7%\nthin horizontal line at 0 = 95% CrI with black circle = point estimate\nthick horizontal line = +/- 68% CrI", hjust=0) +
+  annotate(geom="text", x=2.0,y=.6, label = "Probability of increased survival \n(with intact neurological status) \nwith extracorporeal CPR = 72.7% \n(light turquoise area under the curve (AUC) \nto the right of HR=1)", hjust =0) +
   geom_segment(aes(x = 1.1, y = 0, xend = 1.1, yend = .90)) +
   geom_segment(aes(x = 1 / 1.1, y = 0, xend = 1 / 1.1, yend = .86)) +
-  annotate(geom="text", x=2.0,y=.45, label = "Probability (range) of practical equivalence (+/- 10% OR) \nAUC between 2 black vertical lines =13.4% ", hjust = 0) +
+  annotate(geom="text", x=2.0,y=.35, label = "Probability (range) of practical equivalence (+/- 10% OR) \nAUC between black vertical lines = 13.4% ", hjust = 0) +
   theme_classic() +
   theme(legend.position="none") 
 
@@ -496,7 +507,7 @@ fit1 %>% tidybayes::tidy_draws() |>
 
 \newpage
 
-```{r fig2, warning=FALSE, message=FALSE, fig.height=15, fig.width=8}
+```{r fig2, warning=FALSE, message=FALSE, fig.height=18, fig.width=8}
 g1 <- comb_prior1[[3]]  %>% tidybayes::tidy_draws() |> 
   ggplot(aes(x = exp(TxeCPR),
              fill = after_stat(x > 1),
@@ -506,7 +517,7 @@ g1 <- comb_prior1[[3]]  %>% tidybayes::tidy_draws() |>
   scale_x_continuous(name="OR survival with extracorporeal CPR", limits=c(0, 5)) +
   scale_y_continuous(name="Density") +
   labs(title = "Figure 2a INCEPTION ITT analysis with combined prior*", subtitle = "*data from ARREST and PRAGUE",
-       caption = "AUC to the right of vertical line at HR =1.1 = 73.2%") +
+       caption = "Clinical superiority = AUC to right of vertical line at HR = 1.1 = 73.2%") +
   annotate(geom="text", x=2.0,y=.6, label = "Probability of increased survival \n(with intact neurological status) \nwith extracorporeal CPR = 81.2% \n(light turquoise area under the curve (AUC) \nto the right of HR=1)", hjust = 0) +
   geom_segment(aes(x = 1.1, y = 0, xend = 1.1, yend = .86)) +
   theme_classic() +
@@ -521,7 +532,7 @@ g2 <- enth_prior1[[3]]  %>% tidybayes::tidy_draws() |>
   scale_x_continuous(name="OR survival with extracorporeal CPR", limits=c(0, 5)) +
   scale_y_continuous(name="Density") +
   labs(title = "Figure 2b INCEPTION ITT analysis with enthusiastic prior*", subtitle = "*data from ARREST alone",
-       caption = "AUC to the right of vertical line at HR =1.1 = 77.0%") +
+       caption = "Clinical superiority = AUC to right of vertical line at HR = 1.1 = 77.0%") +
   annotate(geom="text", x=2.0,y=.6, label = "Probability of increased survival \n(with intact neurological status) \nwith extracorporeal CPR = 84.9% \n(light turquoise area under the curve (AUC) \nto the right of HR=1)", hjust = 0) +
   geom_segment(aes(x = 1.1, y = 0, xend = 1.1, yend = .77)) +
   theme_classic() +
@@ -536,7 +547,7 @@ g3 <- skep_prior1[[3]]  %>% tidybayes::tidy_draws() |>
   scale_x_continuous(name="OR survival with extracorporeal CPR", limits=c(0, 5)) +
   scale_y_continuous(name="Density") +
   labs(title = "Figure 2c INCEPTION ITT analysis with skeptical prior*", subtitle = "*data from PRAGUE alone",
-       caption = "AUC to the right of vertical line at HR =1.1 = 71.0%") +
+       caption = "Clinical superiority = AUC to right of vertical line at HR = 1.1 = 71.0%") +
   annotate(geom="text", x=2.0,y=.6, label = "Probability of increased survival \n(with intact neurological status) \nwith extracorporeal CPR = 80.4% \n(light turquoise area under the curve (AUC) \nto the right of HR=1)", hjust = 0) +
   geom_segment(aes(x = 1.1, y = 0, xend = 1.1, yend = .88)) +
   theme_classic() +

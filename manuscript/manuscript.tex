@@ -140,8 +140,8 @@
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same} % disable monospaced font for URLs
 \hypersetup{
-  pdftitle={Extracorporeal CPR for Refractory Out-of-Hospital Cardiac Arrest},
-  pdfauthor={James M Brophy},
+  pdftitle={A Bayesian Perspective},
+  pdfauthor={James M Brophy MD PhD},
   pdfkeywords={extracorporeal CPR, Bayesian statistics},
   colorlinks=true,
   linkcolor={blue},
@@ -154,9 +154,9 @@
 \begin{document}
 
 \begin{frontmatter}
-\title{Extracorporeal CPR for Refractory Out-of-Hospital Cardiac
-Arrest \\\large{A Bayesian Perspective} }
-\author[1]{James M Brophy%
+\title{A Bayesian Perspective \\\large{Extracorporeal CPR for Refractory
+Out-of-Hospital Cardiac Arrest} }
+\author[1]{James M Brophy MD PhD%
 \corref{cor1}%
 \fnref{fn1}}
  \ead{james.brophy@mcgill.ca} 
@@ -171,11 +171,23 @@ Maisonneuve West Room 2B.37},city={Montreal},postcode={H4A
 Recherche Québec Santé}
         
 \begin{abstract}
-A recent randomized clinical trial reported in patients with refractory
-out-of-hospital cardiac arrest, extracorporeal CPR and conventional CPR
-had similar effects on survival with a favorable neurologic outcome.
-Herein, it is examined whether a Bayesian perspective allows any
-additional insights into the interpretation of this trial.
+A recent randomized clinical trial, INCEPTION, reported patients with
+refractory out-of-hospital cardiac arrest, extracorporeal CPR (eCPR) and
+conventional CPR (cCPR) had similar effects on survival with a favorable
+neurologic outcome. The current study examines if a Bayesian perspective
+provides additional insights. Depending on the prior selected, the
+Bayesian approach for the INCEPTION intention-to treat (ITT) analysis
+shows an equivalence probability between 13.4 - 16.8\% (defined as 1 /
+1.1 \textless{} odds ratio (OR) \textless{} 1.1). The probability of
+clinical superiority with eCPR ranges from 65.7 - 77.0 \% (defined as OR
+\textgreater{} 1.1). A similar analyses using INCEPTION per protocol
+data shows an equivalence probability between 4.7 - 20.2\% with reduced
+probabilities of clinical superiority of approximately 25\%. It is
+concluded that a Bayesian perspective allows considerable additional
+insights into the trial analysis and interpretation. The substantial
+probabilities of increased survival, but with considerable residual
+uncertainties, suggests that additional studies are required before
+concluding that eCPR and cCPR have similar survival effects.
 \end{abstract}
 
 
@@ -187,7 +199,7 @@ additional insights into the interpretation of this trial.
     Bayesian statistics
 \end{keyword}
 \end{frontmatter}
-    \ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[interior hidden, frame hidden, borderline west={3pt}{0pt}{shadecolor}, enhanced, boxrule=0pt, breakable, sharp corners]}{\end{tcolorbox}}\fi
+    \ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, borderline west={3pt}{0pt}{shadecolor}, breakable, interior hidden, enhanced, frame hidden, sharp corners]}{\end{tcolorbox}}\fi
 
 \hypertarget{introduction}{%
 \section{Introduction}\label{introduction}}
@@ -214,8 +226,9 @@ favorable neurological outcome''.\citep{CPR2023a}
 This communication does not reiterate the many reasons to be wary of
 null hypothesis significance testing (NHST), p values and confidence
 intervals\citep{RN5420}. Rather it assumes the reader has perhaps heard
-that Bayesian methods mirror our intuitive learning process and is
-curious about its potential application to RCT interpretations.
+that Bayesian methods mirror our intuitive learning and diagnostic
+processes and is curious about its potential application to RCT analyses
+and interpretations.
 
 Therefore the goal of this communication is to examine whether a
 Bayesian perspective permits additional insights into the specific
@@ -277,23 +290,28 @@ with prior information.
 Posterior distributions are summarized with medians and 95\%
 highest-density intervals (credible intervals), defined as the narrowest
 interval containing 95\% of the probability density function
-\citep{mcelreath2020}. We not only calculated the posterior probability
-of any additional survival with eCPR (OR \textgreater1.00), but also of
-clinically meaningful benefits (defined as OR \textgreater1.10).
+\citep{mcelreath2020}. Bayesian analyses permit not only calculated the
+posterior probability of any additional survival with eCPR (OR
+\textgreater1.00), but also of clinically meaningful benefits. While
+there is no universal standard for a clinically meaningful benefit, a
+survival OR \textgreater1.10 may be an acceptable threshold for many.
+Bayesian analyses also allows calculation of the probability between any
+two points. For example, rather than simply comparing if the survival of
+one treatment is better, one can calculate a range of practical
+equivalence (ROPE). While different ranges may be proposed as
+equivalent, +/- 10\% seems a reasonable starting point.
 
 ITT assesses subjects based on the group they were initially (and
 randomly) allocated to, regardless of whether or not they dropped out,
 were fully adhered to the treatment or switched to an alternative
 treatment. ITT analyses can therefore be seen as a conservative estimate
 which mirrors clinical effectiveness. In contrast, a per protocol (PP)
-analysis involves a comparison of treatment groups in a trial that
-includes only those patients who completed the treatment they were
-originally allocated to. Similarly an ``as treated'' analysis considers
-only which treatments subjects received, regardless of their
-randomization status and protocol adherence. While both PP and
-as-treated analyses alone may lead to bias, in conjunction with an ITT
-analysis they may provide additional insights into efficacy and have
-also been examined from a Bayesian perspective.
+analysis accounts for adherence by analyzing only those patients who
+completed the treatment they were originally allocated to. While PP may
+provide additional insights into efficacy, it is subject to bias. Since
+a PP analysis when performed in conjunction with an ITT analysis may
+provide additional insights, this has also been subjected to a Bayesian
+analysis.
 
 All analyses were executed using \texttt{R}\citep{R} within the
 integrated development environment of RStudio. Bayesian analyses were
@@ -307,10 +325,10 @@ code can be found on Github (https://github.com/brophyj/eCPR).
 ITT data from the INCEPTION trial\citep{CPR2023a} and two other
 pertinent trials\citep{RN6751, RN6759} that also randomized CPR to eCPR
 are shown in Table 1. Performing a Bayesian analysis on the INCEPTION
-trial, using the default vague prior, produces an odds ratio (OR) 1.32
+trial, using the default vague priors, produces an odds ratio (OR) 1.32
 (95\% Credible Interval (CrI) 0.54 - 3.22). The closeness of this result
-to the original analysis (OR, 1.4; 95\% CI 0.5 - 3.5) confirms no impact
-of the vague prior and shows this Bayesian analysis is completely
+to the original analysis (OR, 1.4; 95\% CI 0.5 - 3.5) confirms minimal
+impact of the vague prior and shows this Bayesian analysis is completely
 dominated by the observed INCEPTION data.
 
 One of the advantages of a Bayesian approach is the ability to make
@@ -375,19 +393,19 @@ eCPR = extracorporeal cardiopulmonary resuscitation\\
 \end{minipage}
 
 \setlength{\LTpost}{0mm}
-\begin{longtable}{lccccr}
+\begin{longtable}{lcccccc}
 \caption*{
 {\large Table 2 eCPR odds ratios, 95\% credible intervals and probabilities with various priors}
 } \\ 
 \toprule
-Priors & OR & \multicolumn{2}{c}{95\% CrI} & \multicolumn{2}{c}{Probabilities} \\ 
-\cmidrule(lr){1-1} \cmidrule(lr){2-2} \cmidrule(lr){3-4} \cmidrule(lr){5-6}
- & point estimate & lower limit & upper limit & p(OR) >1  &  p(ROPE) \\ 
+Priors & OR & \multicolumn{2}{c}{95\% CrI} & \multicolumn{3}{c}{Probabilities} \\ 
+\cmidrule(lr){1-1} \cmidrule(lr){2-2} \cmidrule(lr){3-4} \cmidrule(lr){5-7}
+ & point estimate & lower limit & upper limit & p(OR) >1  & p(OR) >1.1  &  p(ROPE) \\ 
 \midrule
-Vague & 1.32 & 0.543 & 3.21 & 0.727 & 0.134 \\ 
-Combined & 1.35 & 0.705 & 2.58 & 0.817 & 0.153 \\ 
-Enthusiastic & 1.40 & 0.738 & 2.67 & 0.849 & 0.138 \\ 
-Skeptical & 1.32 & 0.700 & 2.50 & 0.804 & 0.168 \\ 
+Vague & $1.321$ & $0.543$ & $3.215$ & 0.727 & $0.657$ & 0.134 \\ 
+Combined & $1.349$ & $0.705$ & $2.580$ & 0.817 & $0.732$ & 0.153 \\ 
+Enthusiastic & $1.403$ & $0.738$ & $2.668$ & 0.849 & $0.770$ & 0.138 \\ 
+Skeptical & $1.322$ & $0.700$ & $2.496$ & 0.804 & $0.710$ & 0.168 \\ 
 \bottomrule
 \end{longtable}
 \begin{minipage}{\linewidth}
@@ -399,19 +417,19 @@ ROPE: range of practical equivalence = + / - 10\% OR (odds ratio)\\
 \end{minipage}
 
 \setlength{\LTpost}{0mm}
-\begin{longtable}{lccccr}
+\begin{longtable}{lcccccc}
 \caption*{
 {\large Table 3 eCPR (per protocol) odds ratios, 95\% credible intervals and probabilities with various priors}
 } \\ 
 \toprule
-Priors & OR & \multicolumn{2}{c}{95\% CrI} & \multicolumn{2}{c}{Probabilities} \\ 
-\cmidrule(lr){1-1} \cmidrule(lr){2-2} \cmidrule(lr){3-4} \cmidrule(lr){5-6}
- & point estimate & lower limit & upper limit & p(OR) >1  &  p(ROPE) \\ 
+Priors & OR & \multicolumn{2}{c}{95\% CrI} & \multicolumn{3}{c}{Probabilities} \\ 
+\cmidrule(lr){1-1} \cmidrule(lr){2-2} \cmidrule(lr){3-4} \cmidrule(lr){5-7}
+ & point estimate & lower limit & upper limit & p(OR) >1  & p(OR) >1.1  &  p(ROPE) \\ 
 \midrule
-Vague & 0.451 & 0.151 & 1.35 & 0.0698 & 0.0473 \\ 
-Combined & 0.859 & 0.430 & 1.71 & 0.33 & 0.2022 \\ 
-Enthusiastic & 0.870 & 0.437 & 1.73 & 0.345 & 0.2013 \\ 
-Skeptical & 0.858 & 0.419 & 1.75 & 0.327 & 0.1970 \\ 
+Vague & $0.451$ & $0.151$ & $1.348$ & $0.070$ & $0.049$ & $0.047$ \\ 
+Combined & $0.859$ & $0.430$ & $1.713$ & $0.330$ & $0.238$ & $0.202$ \\ 
+Enthusiastic & $0.870$ & $0.437$ & $1.734$ & $0.345$ & $0.251$ & $0.201$ \\ 
+Skeptical & $0.858$ & $0.419$ & $1.755$ & $0.327$ & $0.237$ & $0.197$ \\ 
 \bottomrule
 \end{longtable}
 \begin{minipage}{\linewidth}
