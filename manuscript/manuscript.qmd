@@ -16,7 +16,7 @@ author:
         corresponding: true
     note: JMB is a research scholar supported by Les Fonds de Recherche Québec Santé
 abstract: |
-  A recent randomized clinical trial, INCEPTION, reported patients with refractory out-of-hospital cardiac arrest, extracorporeal CPR (eCPR) and conventional CPR (cCPR) had similar effects on survival with a favorable neurologic outcome. The current study examines if a Bayesian perspective provides  additional insights. Depending on the prior selected, the Bayesian approach for the INCEPTION intention-to treat (ITT) analysis shows an equivalence probability between 13.4 - 16.8% (defined as 1 / 1.1 < odds ratio (OR) < 1.1). The probability of clinical superiority with eCPR ranges from 65.7 - 77.0 % (defined as OR > 1.1). A similar analyses using INCEPTION per protocol data shows an equivalence probability between 4.7 - 20.2% with reduced probabilities of clinical superiority of approximately 25%. It is concluded that a Bayesian perspective allows considerable additional insights into the trial analysis and interpretation. The substantial probabilities of increased survival, but with considerable residual uncertainties, suggests that additional studies are required before concluding that eCPR and cCPR have similar survival effects.
+  A recent randomized clinical trial, INCEPTION, reported in patients with refractory out-of-hospital cardiac arrest, extracorporeal CPR (eCPR) and conventional CPR (cCPR) had similar effects on survival with a favorable neurologic outcome. The current study examines if a Bayesian perspective provides  additional insights. Depending on the prior selected, the Bayesian approach for the INCEPTION intention-to treat (ITT) analysis shows an equivalence probability between 13.4 - 16.8% (defined as 1 / 1.1 < odds ratio (OR) < 1.1). The probability of clinical superiority with eCPR ranges from 65.7 - 77.0 % (defined as OR > 1.1). A similar analyses using INCEPTION per protocol (PP) data shows an equivalence probability between 4.7 - 20.2% with reduced probabilities of clinical superiority not exceeding 25%. It is concluded that a Bayesian perspective allows considerable additional insights into the trial analysis and interpretation. The non-negligible probabilities of increased survival with their considerable residual uncertainties, suggests that additional studies are required before concluding that eCPR and cCPR have similar survival effects.
 keywords: 
   - extracorporeal CPR
   - Bayesian statistics
@@ -60,17 +60,16 @@ Out-of-hospital cardiac arrest is a frequent event and fortunately its
 devastating consequences can be partially mitigated by rapid
 commencement of basic life support with high-quality chest compressions
 and external defibrillation (conventional cardiopulmonary resuscitation
-(CPR)). However, there remains a substantial subset of individuals who
+(cCPR)). However, there remains a substantial subset of individuals who
 do not respond rapidly to these measures and whether more invasive
 measures. Whether the addition of more aggressive measure including
 extracorporeal CPR (the addition of extracorporeal membrane oxygenation
 to standard advanced cardiac life support (eCPR)) can improve survival and
-diminish anoxic brain injury is a current topic of research. The largest
+diminish anoxic brain injury is a current topic of research. A large
 randomized clinical trial (RCT) examining this question recently
-published their results[@CPR2023a]. For the primary outcome, 30 day
-survival without significant neurological deficit, the authors observed
-an odds ratio of 1.4 (95% confidence interval, 0.5 to 3.5; P = 0.52) in
-favor of extracorporeal CPR for leading to their conclusion "In patients
+published their results[@CPR2023a]. For their primary outcome, 30 day
+survival without significant neurological deficit, an odds ratio of 1.4 (95% confidence interval, 0.5 to 3.5; P = 0.52) in
+favor of extracorporeal CPR was observed leading to the conclusion "In patients
 with refractory out-of-hospital cardiac arrest, extracorporeal CPR and
 conventional CPR had similar effects on survival with a favorable
 neurological outcome".[@CPR2023a]
@@ -83,9 +82,8 @@ about its potential application to RCT analyses and interpretations.
 
 Therefore the goal of this communication is to examine whether a
 Bayesian perspective permits additional insights into the specific
-clinical question regarding any added value of extracorporeal CPR
-following an out-of-hospital arrest in patients refractory to standard
-CPR.
+clinical question regarding any added value of eCPR
+following an out-of-hospital arrest in patients refractory to cCPR.
 
 # Methods
 
@@ -94,7 +92,7 @@ neurological status, based on an intention to treat (ITT) analysis was
 abstracted from the original INCEPTION trial [@CPR2023a] and used for
 the primary analysis. The ITT analysis has the advantage of minimizing
 bias by preserving the prognostic balance afforded by randomization as
-well as assuring the validity of the statistical analyses. 
+well as assuring the validity of the accompanying statistical analyses. 
 
 Bayesian analytical approaches provide a number of benefits over the
 classical NHST approach, including parameter estimation accompanied by
@@ -103,50 +101,52 @@ risk of survival with intact neurological status), and the incorporation
 prior knowledge [@BrophyCardio; @Zampieri].
 
 These probability statements arise from the posterior distribution
-according to the following equation:
+according to the Bayes Thereom, expressed as follows: 
 $$ \text{Posterior}  = \frac{\text{Probability of the data} * \text{Prior}}{\text{Normalizing Constant}} $$
 
 Therefore, in addition to the current data summarized by the probability
-of the data (likelihood function) one requires a prior probability
-distribution for each parameter. The mechanics of the Bayesian analyses
-were performed using the Stan programming language [@stan] through the R
-package rstanarm [@rstanarm] and fit a logistic regression model with a
-single treatment parameter, $\theta$. Because our focus is the
-interpretation of the INCEPTION trial alone, our primary analysis used
-rstanarm's default vague parameter priors
+of the data (likelihood function), prior probability
+distributions are required. Because our main focus is the analysis and 
+interpretation of the INCEPTION trial alone, our primary analysis used a default vague parameter prior
 ($log(\theta) \sim Normal [0, 2.50]$, thereby assuring that the
 posterior distribution is dominated by the observed INCEPTION data.
 
 The robustness of the Bayesian approach is often assessed by sensitivity
 analyses that examine the variation in the posterior probability as a
-function of the choice of different prior distributions. Using prior
-information also underscores the important advantage of Bayesian
-analyses to learn sequentially. There were two previous RCTs examining
+function of the choice of different prior distributions. Incorporating prior
+information underscores another important advantage of Bayesian
+analyses, the ability to learn sequentially. There were two previous RCTs examining
 extracorporeal CPR[@RN6759; @RN6751] and while the protocols are not
 identical, it may be reasonable to allow this data to serve as 
 informed priors for the eCPR parameter, which can be updated with the INCEPTION data.    
 
+Therefore, in addition to the vague prior described above, we considered three possible informative priors    
+i) a **combined** prior using all the available prior RCT data[@RN6751;@RN6759]               
+ii) an **enthusiastic** prior, so labelled since this uses only the ARREST data, a trial stopped prematurely for efficacy        
+iii) a **skeptical** prior, so labelled since this uses only the PRAGUE data, a trial  stopped prematurely for futility    
+
 This prior
 information of the probability of eCPR success in each previous trial, $X_i$, can be summarized as a normal distribution with a mean equal to the proportion of successes, $\hat{p_i}$ with a standard deviation equal to $$\sqrt{\hat{p_i}*(1-\hat{p_i})}$$ 
-As  baseline success rates for standard CPR varies markedly between the three studies, it was decided to maintain the INCEPTION control baseline with the vague prior for all analyses and to update only the eCPR arm with prior information.    
+As  baseline success rates for cCPR varies markedly between the three studies, it was decided to maintain the INCEPTION control baseline with the vague prior for all analyses and to update only the eCPR arm with prior information.    
 
 Posterior distributions are summarized with medians and 95%
-highest-density intervals (credible intervals), defined as the narrowest
+highest-density intervals (credible intervals (CrI)), defined as the narrowest
 interval containing 95% of the probability density function
-[@mcelreath2020]. Bayesian analyses permit not only calculated the posterior probability of
-any additional survival with eCPR (OR \>1.00), but also of clinically meaningful benefits. While there is no universal standard for a clinically meaningful benefit, a survival OR \>1.10 may be an acceptable threshold for many. Bayesian analyses also allows calculation of the probability between any two points. For example, rather than simply comparing if the survival of one treatment is better, one can calculate a range of practical equivalence (ROPE). While different ranges may be proposed as equivalent, +/- 10% seems a reasonable starting point.             
+[@mcelreath2020]. Bayesian analyses permit not only calculations of the posterior probability of
+any additional survival with eCPR (OR \>1.00), but also of clinically meaningful benefits. While there is no universal definition for a clinically meaningful benefit, a survival OR \>1.10 may be an acceptable threshold for many. Bayesian analyses also allows calculation of the probability between any two points. For example, rather than simply comparing if the survival of one treatment is better than another, one can calculate a range of practical equivalence (ROPE) between treatments. While different ranges may be proposed, +/- 10% seems a reasonable small difference that many woul consider as equivalent.             
 
 ITT assesses subjects based on the group they were initially (and randomly) allocated
 to, regardless of whether or not they dropped out, were fully adhered to
-the treatment or switched to an alternative treatment. ITT analyses can
+the treatment or switched to an alternative treatment. In superiority trials, ITT analyses can
 therefore be seen as a conservative estimate which mirrors clinical
 effectiveness. In contrast, a per protocol (PP) analysis accounts for adherence by analyzing only those
 patients who completed the treatment they were originally allocated to.
 While PP may provide additional insights
 into efficacy, it is subject to bias. Since a PP analysis when performed in conjunction with an ITT analysis may provide additional insights, this has also been subjected to a Bayesian analysis.       
 
-All analyses were executed using `R`[@R]  within the integrated development environment
-of RStudio. Bayesian analyses were performed using the front end `rstanarm` package[@rstanarm] to the `Stan` programming language[stan]. The statistical code can be found on Github
+Posterior distributions were estimated using the Hamiltonian Monte Carlo,a form of 
+Markov Chain Monte Carlo simulations in which the gradient of the log posterior is 
+used to efficiently sample the posterior space. This was implemented in `Stan`[@stan] using the front end `rstanarm` package[@rstanarm] by fitting a logistic regression model with a single treatment parameter. All analyses were executed using `R`[@R]  within the integrated development environmentof RStudio[@Rstudio].  The statistical code can be found on Github
 (https://github.com/brophyj/eCPR).
 
 # Results
@@ -188,9 +188,9 @@ fig_prob_1.1.1 <- sum(tt$TxeCPR > -0.0954)/nrow(tt) # OR > 1 / 1.1 (log (0.909) 
 vague_eq <- fig_prob_1.1.1 - fig_prob_1.1
 ```
 
-ITT data from the INCEPTION trial[@CPR2023a] and two other pertinent trials[@RN6751;@RN6759] that also randomized CPR to eCPR are shown in Table 1. Performing a Bayesian analysis on the INCEPTION trial, using the default vague priors, produces an odds ratio (OR) 1.32 (95% Credible Interval (CrI) 0.54 - 3.22). The closeness of this result to the original analysis (OR, 1.4; 95% CI 0.5 - 3.5) confirms minimal impact of the vague prior and shows this Bayesian analysis is completely dominated by the observed INCEPTION data.  
+ITT data from the INCEPTION trial[@CPR2023a] and two other pertinent trials[@RN6759;@RN6751] that also randomized out of hospital cardiac arrest patients to cCPR to eCPR are shown in Table 1. Performing a Bayesian analysis on the INCEPTION trial, using a default vague prior, produces an odds ratio (OR) 1.32 with 95% CrI 0.54 - 3.22. The closeness of this result to the original analysis (OR, 1.4; 95% CI 0.5 - 3.5) confirms the minimal impact of the default vague prior and reveals a Bayesian analysis completely dominated by the observed INCEPTION data.  
 
-One of the advantages of a Bayesian approach is the ability to make direct probability statements about the estimand of improved survival with eCPR. The eCPR probability density function for improved survival from INCEPTION data with the default vague prior is displayed in Figure 1 and reveals that the probability of enhanced survival with eCPR is `r round(fig_prob*100,2)`%. The probability that the improved survival exceeds a 10% improvement is `r round(fig_prob_1.1,2)`%.   
+One of the advantages of a Bayesian approach is the ability to make direct probability statements about the estimand of improved eCPR survival. The eCPR probability density function for improved survival from INCEPTION data with the default vague prior is displayed in Figure 1 and reveals that the probability of enhanced survival with eCPR is `r round(fig_prob*100,1)`%. The probability that the improved survival exceeds a 10% improvement is `r round(fig_prob_1.1*100,1)`% and the ROPE probability is `r round(vague_eq*100,1)`% (Table 2).  
 
 
 
@@ -251,13 +251,12 @@ enth_eq <- enth_prob_1.1.1 - enth_prob_1.1
 skep_eq <- skep_prob_1.1.1 - skep_prob_1.1
 ```
 
-Another advantage of a Bayesian approach is the possibility of including previous evidence as informed priors. We considered three possible scenarios i) using all the available prior RCT data[@RN6751;@RN6759] to create a combined prior which was expressed as a N(`r round(comb_m_eCPR,2)`, `r round(comb_sd_eCPR,2)`)    
-ii) using only the ARREST data, labelled an enthusiastic prior, as this trial was stopped prematurely for efficacy, expressed as a N(`r round(enth_m_eCPR,2)`, `r round(enth_sd_eCPR,2)`)    
-iii) using only the PRAGUE data, labelled a skeptical prior, as this trial was stopped prematurely for futility, expressed as a N(`r round(skep_m_eCPR,2)`, `r round(skep_sd_eCPR,2)`)    
+Three different informative priors were considered i)  a N(`r round(comb_m_eCPR,2)`, `r round(comb_sd_eCPR,2)`) ii) a N(`r round(enth_m_eCPR,2)`, `r round(enth_sd_eCPR,2)`) iii) a N(`r round(skep_m_eCPR,2)`, `r round(skep_sd_eCPR,2)`) distributions to represent all the combined available RCT data[@RN6759;@RN6751], only the ARREST[@RN6751] data  and only the PRAGUE[@RN6759] data, respectively
 
-These different prior probabilities can be updated using the INCEPTION to create posterior distributions that are summarized in Table 2. Basically, in all cases the point estimate for the enhanced eCPR survival remains fairly constant but the associated uncertainty is reduced with the additional data as reflected by the narrower 95% CrI. The posterior probability of improved eCPR survival goes from 80% with a skeptical prior to 85% with the enthusiastic prior. The graphical presentation of these results is shown in Figure 2.    
+These different prior probabilities were updated using with the INCEPTION ITT data to create the posterior distributions displayed in Table 2. The probability for enhanced eCPR survival has increased to 80.4% with a skeptical prior to 84.9% with the enthusiastic prior and, as expected, the associated uncertainty has been reduced, as reflected by the narrower 95% CrI, with the additional data. The posterior probability of improved eCPR survival goes from 80% with a skeptical prior to 85% with the enthusiastic prior. 
+The probability that the eCPR survival improvements exceed the proposed 10% clinical threshold are `r round(skep_prob_1.1*100,1)`% and `r round(enth_prob_1.1*100,1)`% for the skeptical and enthusiastic priors, respectively. The corresponding ROPE probabilities are `r round(skep_eq*100,1)`%  and `r round(enth_eq*100,1)`% (Table 2). Posterior probabilities with the combined prior fell as expected between the results with the skeptical and enthusiastic priors. The graphical presentations of these results are shown in Figure 2.    
 
-Although INCEPTION did not report a per-protocol analysis, just an analysis may be revealing concerning treatment efficacy, at the risk of an increased risk of bias by not respecting the ITT. From INCEPTION Figure S4[@CPR2023a], it appears that the per protocol data for mortality is 13 survivors from 61 patients in the CPR group compared to 5 survivors from 46 patients receiving eCPR. With a vague prior, the probability of increased survival with eCPR is decreased compared to CPR but with wide CrI (OR 0.45, 95% CrI 1.5 - 1.35), limiting any definitive conclusions. The probabilities of increased eCPR survival incorporating the previous identified priors is shown in Table 3.
+INCEPTION did not report a per-protocol analysis. Such an analysis may be helpful in assessing treatment efficacy, unfortunately at the risk of an increased risk of bias by not respecting the ITT principle. From INCEPTION Figure S4[@CPR2023a], it appears that the per protocol data for mortality is 13 survivors from 61 patients in the cCPR group compared to 5 survivors from 46 patients receiving eCPR. With a vague prior, the OR of increased survival with eCPR is decreased compared to cCPR but with very wide CrI (OR 0.45, 95% CrI 0.15 - 1.35), limiting any definitive conclusions. The decreased eCPR success rates in the INCEPTION PP data results in reduced posterior probabilities of eCPR benefit and an increased probability of equivalence or benefit with cCPR. The exact probabilities of increased eCPR survival incorporating the previous identified informative priors are shown in Table 3.
 
 ```{r PP, cache=TRUE}
 # per protocol - only data for INCEPTION, other data just placeholder if PP data becomes available
@@ -308,7 +307,11 @@ skep_eq_pp <- skep_prob_pp_1.1.1 - skep_prob_pp_1.1
 
 ```
 
+# Discussion
 
+This Bayesian analysis of the INCEPTION ITT data alone (with a vague prior) suggests the presence of a non-negligible probability of benefit with eCPR, in the range of 73%, compared to cCPR. The probability that this improvement in survival exceeds 10% is almost 66%. The consideration of pertinent prior information from two previous RCTs[@RN6751;@RN6759] in the field results in estimates of improved eCPR survival probabilities, with intact neurological status, in the vicinity of 80-85%. Moreover depending on the choice of prior beliefs included, the posterior probability of at least a 10% improved eCPR survival is in the range of 71 - 77% probability. In contrast to the INCEPTION original conclusion of similar survival effects between the two treatment, this re-analysis suggests only a modest probability of approximately that survival probabilities between the two techniques are within a reasonably acceptable equivalence range. The overall message would appear to be that while any definitive conclusions regarding the superiority of eCPR are lacking, the possibility of a clinically meaningful benefit or even less likley clinically meaningful harm has not been reasonably excluded and continued research is necessary to clarifying the remaining uncertainties.    
+
+The INCEPTION researchers are to be congratulated on their trial design, its execution, and addressing an important clinical question in the most challenging of research environments. However the natural constraints of standard statistical analyses, also known as null hypothesis significance testing, limits the full exploitation of the current data and updating of past knowledge. For trails failing to meet statistical significance, those incorrectly labelled "negative" trials, null hypothesis significance testing favors confusion "between absence of evidence and evidence of absence"[@RN6765].  
 
 
 \newpage
