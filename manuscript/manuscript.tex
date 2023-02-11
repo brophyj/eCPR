@@ -199,7 +199,7 @@ concluding that eCPR and cCPR have similar survival effects.
     Bayesian statistics
 \end{keyword}
 \end{frontmatter}
-    \ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[breakable, sharp corners, enhanced, interior hidden, boxrule=0pt, borderline west={3pt}{0pt}{shadecolor}, frame hidden]}{\end{tcolorbox}}\fi
+    \ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, sharp corners, breakable, interior hidden, borderline west={3pt}{0pt}{shadecolor}, enhanced, boxrule=0pt]}{\end{tcolorbox}}\fi
 
 \hypertarget{introduction}{%
 \section{Introduction}\label{introduction}}
@@ -399,24 +399,49 @@ vicinity of 80-85\%. Moreover depending on the choice of prior beliefs
 included, the posterior probability of at least a 10\% improved eCPR
 survival is in the range of 71 - 77\% probability. In contrast to the
 INCEPTION original conclusion of similar survival effects between the
-two treatment, this re-analysis suggests only a modest probability of
-approximately that survival probabilities between the two techniques are
-within a reasonably acceptable equivalence range. The overall message
-would appear to be that while any definitive conclusions regarding the
-superiority of eCPR are lacking, the possibility of a clinically
-meaningful benefit or even less likley clinically meaningful harm has
-not been reasonably excluded and continued research is necessary to
-clarifying the remaining uncertainties.
+two treatments, this re-analysis suggests only a modest probability of
+approximately 15\% that survival probabilities between the two
+techniques are within a reasonably acceptable equivalency range.
+Additional uncertainty about the benefits or harms of eCPR arise from
+the per protocol analysis, both with and without informative priors.
 
 The INCEPTION researchers are to be congratulated on their trial design,
 its execution, and addressing an important clinical question in the most
 challenging of research environments. However the natural constraints of
 standard statistical analyses, also known as null hypothesis
 significance testing, limits the full exploitation of the current data
-and updating of past knowledge. For trails failing to meet statistical
-significance, those incorrectly labelled ``negative'' trials, null
-hypothesis significance testing favors confusion ``between absence of
-evidence and evidence of absence''\citep{RN6765}.
+and updating of past knowledge. For trials such as INCEPTION that fail
+to meet statistical significance and are often thought of as
+``negative'' trials, null hypothesis significance testing favors
+confusion ``between absence of evidence and evidence of
+absence''\citep{RN6765}. Rather than dichotomizing results into
+statistical significance or not, with its obligatory loss of
+information, Bayesian analysis concentrates on estimation of key outcome
+differences with direct probability measures of their uncertainty.
+
+Although this Bayesian analysis presents the strengths noted above, it
+also had limitations. First, we did not have access to either individual
+data from any of the trials limiting the possibility of examining
+specific subgroups. Also for the per protocol analysis, this data was
+only available for survival and not the primary outcome that included
+survival with intact neurological status. The threshold choices for
+superiority and equivalence may be seen as arbitrary, although the
+analyses can be easily repeated for different choices. Given the
+existence of only 3 trials differences between the baseline cCPR rates
+could not be reliably modeled. We choose not to perform a traditional
+Bayesian meta-analysis with a semi-informative prior for the
+between-study variation because our goal was to illustrate how Bayesian
+principles could be informative when applied to the interpretation of
+new trial data.
+
+The overall message from this study is that standard statistical
+analyses leading to a conclusion of ``similar survival effects'' is
+overly simplified and potentially inaccurate. This Bayesian analysis
+demonstrates clearly that while any definitive conclusions regarding the
+superiority of eCPR are lacking, the possibility of a clinically
+meaningful benefit, or even somewhat less likely clinically meaningful
+harm, has not been reasonably excluded and continued research is
+necessary to clarifying the remaining uncertainties.
 
 \newpage
 
