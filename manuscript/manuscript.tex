@@ -185,9 +185,10 @@ clinical superiority with eCPR ranges from 65.7 - 77.0 \% (defined as OR
 reduced probabilities of clinical superiority not exceeding 25\%. It is
 concluded that a Bayesian perspective allows considerable additional
 insights into the trial analysis and interpretation. The non-negligible
-probabilities of increased survival with their considerable residual
-uncertainties, suggests that additional studies are required before
-concluding that eCPR and cCPR have similar survival effects.
+probabilities of increased survival, or even harm, with their
+considerable residual uncertainties, suggests that additional studies
+are required before concluding that eCPR and cCPR have similar survival
+effects.
 \end{abstract}
 
 
@@ -199,7 +200,7 @@ concluding that eCPR and cCPR have similar survival effects.
     Bayesian statistics
 \end{keyword}
 \end{frontmatter}
-    \ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, sharp corners, breakable, interior hidden, borderline west={3pt}{0pt}{shadecolor}, enhanced, boxrule=0pt]}{\end{tcolorbox}}\fi
+    \ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, breakable, frame hidden, borderline west={3pt}{0pt}{shadecolor}, interior hidden, enhanced, sharp corners]}{\end{tcolorbox}}\fi
 
 \hypertarget{introduction}{%
 \section{Introduction}\label{introduction}}
@@ -363,13 +364,15 @@ Table 2. The probability for enhanced eCPR survival has increased to
 as expected, the associated uncertainty has been reduced, as reflected
 by the narrower 95\% CrI, with the additional data. The posterior
 probability of improved eCPR survival goes from 80\% with a skeptical
-prior to 85\% with the enthusiastic prior. The probability that the eCPR
-survival improvements exceed the proposed 10\% clinical threshold are
-71\% and 77\% for the skeptical and enthusiastic priors, respectively.
-The corresponding ROPE probabilities are 16.8\% and 13.8\% (Table 2).
-Posterior probabilities with the combined prior fell as expected between
-the results with the skeptical and enthusiastic priors. The graphical
-presentations of these results are shown in Figure 2.
+prior to 85\% with the enthusiastic prior.
+
+The probability that the eCPR survival improvements exceed a minimum
+10\% clinical threshold for improvement are 71\% and 77\% for the
+skeptical and enthusiastic priors, respectively. The corresponding ROPE
+probabilities are 16.8\% and 13.8\% (Table 2). Posterior probabilities
+with the combined prior fell as expected between the results with the
+skeptical and enthusiastic priors. The graphical presentations of these
+results are shown in Figure 2.
 
 INCEPTION did not report a per-protocol analysis. Such an analysis may
 be helpful in assessing treatment efficacy, unfortunately at the risk of
@@ -382,8 +385,9 @@ cCPR but with very wide CrI (OR 0.45, 95\% CrI 0.15 - 1.35), limiting
 any definitive conclusions. The decreased eCPR success rates in the
 INCEPTION PP data results in reduced posterior probabilities of eCPR
 benefit and an increased probability of equivalence or benefit with
-cCPR. The exact probabilities of increased eCPR survival incorporating
-the previous identified informative priors are shown in Table 3.
+cCPR. The probabilities of eCPR survival compared to cCPR using the per
+protocol data and incorporating the previous identified informative
+priors are shown in Table 3.
 
 \hypertarget{discussion}{%
 \section{Discussion}\label{discussion}}
@@ -405,15 +409,16 @@ techniques are within a reasonably acceptable equivalency range.
 Additional uncertainty about the benefits or harms of eCPR arise from
 the per protocol analysis, both with and without informative priors.
 
-The INCEPTION researchers are to be congratulated on their trial design,
-its execution, and addressing an important clinical question in the most
-challenging of research environments. However the natural constraints of
-standard statistical analyses, also known as null hypothesis
-significance testing, limits the full exploitation of the current data
-and updating of past knowledge. For trials such as INCEPTION that fail
-to meet statistical significance and are often thought of as
-``negative'' trials, null hypothesis significance testing favors
-confusion ``between absence of evidence and evidence of
+The INCEPTION researchers have ddressed an important clinical question
+in the most challenging of research environments and are to be
+congratulated on their trial design, its execution, and a nuanced
+discussion. However the natural constraints of standard statistical
+analyses, also known as null hypothesis significance testing, limits the
+quantitative appreciation of their data and prevents a full and
+comprehensive exploitation and updating of past knowledge. For trials
+such as INCEPTION that fail to meet statistical significance and are
+often thought of as ``negative'' trials, null hypothesis significance
+testing favors confusion ``between absence of evidence and evidence of
 absence''\citep{RN6765}. Rather than dichotomizing results into
 statistical significance or not, with its obligatory loss of
 information, Bayesian analysis concentrates on estimation of key outcome
@@ -439,9 +444,12 @@ analyses leading to a conclusion of ``similar survival effects'' is
 overly simplified and potentially inaccurate. This Bayesian analysis
 demonstrates clearly that while any definitive conclusions regarding the
 superiority of eCPR are lacking, the possibility of a clinically
-meaningful benefit, or even somewhat less likely clinically meaningful
-harm, has not been reasonably excluded and continued research is
-necessary to clarifying the remaining uncertainties.
+meaningful benefit, or even less likely the possibility of clinically
+meaningful harm, has not been reasonably excluded and continued research
+is necessary to clarifying the remaining uncertainties. The final
+dilemma confronting clinicians is that even a Bayesian analysis of a
+randomized trial provides only probability estimates of an average
+treatment effect and not the elusive individual treatment effect.
 
 \newpage
 
@@ -457,7 +465,7 @@ necessary to clarifying the remaining uncertainties.
 Trial & Fail CPR (n) & Fail eCPR (n) & Success CPR (n) & Success eCPR (n) \\ 
 \midrule
 INCEPTION & 52 & 56 & 10 & 14 \\ 
-ARREST & 15 & 8 & 0 & 6 \\ 
+ARREST & 14 & 8 & 1 & 6 \\ 
 PRAGUE & 108 & 86 & 24 & 38 \\ 
 \bottomrule
 \end{longtable}
