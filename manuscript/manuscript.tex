@@ -175,20 +175,20 @@ A recent randomized clinical trial, INCEPTION, reported in patients with
 refractory out-of-hospital cardiac arrest, extracorporeal CPR (eCPR) and
 conventional CPR (cCPR) had similar effects on survival with a favorable
 neurologic outcome. The current study examines if a Bayesian perspective
-provides additional insights. Depending on the prior selected, the
-Bayesian approach for the INCEPTION intention-to treat (ITT) analysis
-shows an equivalence probability between 13.4 - 16.8\% (defined as 1 /
-1.1 \textless{} odds ratio (OR) \textless{} 1.1). The probability of
-clinical superiority with eCPR ranges from 65.7 - 77.0 \% (defined as OR
-\textgreater{} 1.1). A similar analyses using INCEPTION per protocol
-(PP) data shows an equivalence probability between 4.7 - 20.2\% with
-reduced probabilities of clinical superiority not exceeding 25\%. It is
-concluded that a Bayesian perspective allows considerable additional
-insights into the trial analysis and interpretation. The non-negligible
-probabilities of increased survival, or even harm, with their
-considerable residual uncertainties, suggests that additional studies
-are required before concluding that eCPR and cCPR have similar survival
-effects.
+provides additional quantative insights. Depending on the prior
+selected, the Bayesian approach for the INCEPTION intention-to treat
+(ITT) analysis shows an equivalence probability between 13.4 - 16.8\%
+(defined as 1 / 1.1 \textless{} odds ratio (OR) \textless{} 1.1). The
+probability of clinical superiority with eCPR ranges from 65.7 - 77.0 \%
+(defined as OR \textgreater{} 1.1). A similar analyses using INCEPTION
+per protocol (PP) data shows an equivalence probability between 4.7 -
+20.2\% with reduced probabilities of clinical superiority not exceeding
+25\%. It is concluded that a Bayesian perspective allows considerable
+additional quantative insights into the trial analysis and
+interpretation. The non-negligible probabilities of increased survival,
+or even harm, with their considerable residual uncertainties, suggests
+that additional studies are required before concluding that eCPR and
+cCPR have similar average survival effects.
 \end{abstract}
 
 
@@ -200,7 +200,7 @@ effects.
     Bayesian statistics
 \end{keyword}
 \end{frontmatter}
-    \ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, breakable, frame hidden, borderline west={3pt}{0pt}{shadecolor}, interior hidden, enhanced, sharp corners]}{\end{tcolorbox}}\fi
+    \ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, enhanced, frame hidden, interior hidden, breakable, borderline west={3pt}{0pt}{shadecolor}, sharp corners]}{\end{tcolorbox}}\fi
 
 \hypertarget{introduction}{%
 \section{Introduction}\label{introduction}}
@@ -327,8 +327,15 @@ posterior space. This was implemented in \texttt{Stan}\citep{stan} using
 the front end \texttt{rstanarm} package\citep{rstanarm} by fitting a
 logistic regression model with a single treatment parameter. All
 analyses were executed using \texttt{R}\citep{R} within the integrated
-development environmentof RStudio\citep{Rstudio}. The statistical code
-can be found on Github (https://github.com/brophyj/eCPR).
+development environmentof RStudio\citep{Rstudio}. Model convergence was
+assessed by examination of the Monte Carlo Standard Error \textless{}
+10\% of the posterior standard deviation, \(n_{eff}\) an estimate of the
+effective number of independent draws from the posterior distribution of
+the estimand \textgreater{} 10\% maximum and \(\hat{R}\) a measures the
+ratio of the average variance of samples within each chain to the
+variance of the pooled samples across chains \textless{} 1.1. The
+statistical code can be found on Github
+(https://github.com/brophyj/eCPR).
 
 \hypertarget{results}{%
 \section{Results}\label{results}}
@@ -432,15 +439,16 @@ only available for survival and not the primary outcome that included
 survival with intact neurological status. The threshold choices for
 superiority and equivalence may be seen as arbitrary, although the
 analyses can be easily repeated for different choices. Given the
-existence of only 3 trials differences between the baseline cCPR rates
-could not be reliably modeled. We choose not to perform a traditional
-Bayesian meta-analysis with a semi-informative prior for the
+existence of only 3 trials estimating the very divergent baseline cCPR
+rates could not be reliably modeled. We choose not to perform a
+traditional Bayesian meta-analysis with a semi-informative prior for the
 between-study variation because our goal was to illustrate how Bayesian
-principles could be informative when applied to the interpretation of
-new trial data.
+principles could be informative when applied to the analysis and
+interpretation of new trial data, both in the situation of no and
+considerable previous knowledge.
 
 The overall message from this study is that standard statistical
-analyses leading to a conclusion of ``similar survival effects'' is
+analyses leading to a conclusion of ``similar survival effects'' may be
 overly simplified and potentially inaccurate. This Bayesian analysis
 demonstrates clearly that while any definitive conclusions regarding the
 superiority of eCPR are lacking, the possibility of a clinically
