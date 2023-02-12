@@ -200,7 +200,7 @@ cCPR have similar average survival effects.
     Bayesian statistics
 \end{keyword}
 \end{frontmatter}
-    \ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, enhanced, frame hidden, interior hidden, breakable, borderline west={3pt}{0pt}{shadecolor}, sharp corners]}{\end{tcolorbox}}\fi
+    \ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, enhanced, borderline west={3pt}{0pt}{shadecolor}, sharp corners, breakable, interior hidden, boxrule=0pt]}{\end{tcolorbox}}\fi
 
 \hypertarget{introduction}{%
 \section{Introduction}\label{introduction}}
@@ -333,8 +333,9 @@ assessed by examination of the Monte Carlo Standard Error \textless{}
 effective number of independent draws from the posterior distribution of
 the estimand \textgreater{} 10\% maximum and \(\hat{R}\) a measures the
 ratio of the average variance of samples within each chain to the
-variance of the pooled samples across chains \textless{} 1.1. The
-statistical code can be found on Github
+variance of the pooled samples across chains \textless{} 1.1. Reporting
+has followed the Bayesian Analysis Reporting Guidelines\citep{RN6637}.
+The statistical code can be found on Github
 (https://github.com/brophyj/eCPR).
 
 \hypertarget{results}{%

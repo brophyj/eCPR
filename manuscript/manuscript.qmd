@@ -146,7 +146,7 @@ into efficacy, it is subject to bias. Since a PP analysis when performed in conj
 
 Posterior distributions were estimated using the Hamiltonian Monte Carlo,a form of 
 Markov Chain Monte Carlo simulations in which the gradient of the log posterior is 
-used to efficiently sample the posterior space. This was implemented in `Stan`[@stan] using the front end `rstanarm` package[@rstanarm] by fitting a logistic regression model with a single treatment parameter. All analyses were executed using `R`[@R]  within the integrated development environmentof RStudio[@Rstudio].  Model convergence was assessed by examination of the Monte Carlo Standard Error < 10% of the posterior standard deviation, $n_{eff}$ an estimate of the effective number of independent draws from the posterior distribution of the estimand > 10% maximum and $\hat{R}$  a measures the ratio of the average variance of samples within each chain to the variance of the pooled samples across chains < 1.1. The statistical code can be found on Github
+used to efficiently sample the posterior space. This was implemented in `Stan`[@stan] using the front end `rstanarm` package[@rstanarm] by fitting a logistic regression model with a single treatment parameter. All analyses were executed using `R`[@R]  within the integrated development environmentof RStudio[@Rstudio].  Model convergence was assessed by examination of the Monte Carlo Standard Error < 10% of the posterior standard deviation, $n_{eff}$ an estimate of the effective number of independent draws from the posterior distribution of the estimand > 10% maximum and $\hat{R}$  a measures the ratio of the average variance of samples within each chain to the variance of the pooled samples across chains < 1.1. Reporting has followed the Bayesian Analysis Reporting Guidelines[@RN6637]. The statistical code can be found on Github
 (https://github.com/brophyj/eCPR).
 
 # Results
@@ -176,6 +176,8 @@ fig_prob <- sum(tt$TxeCPR>0)/nrow(tt)
 # get_variables(fit1)
 # prior_summary(fit1)
 # help('prior_summary.stanreg') 
+# mcmc_pairs(as.array(fit1),  pars = c("(Intercept)",  "TxeCPR" ),off_diag_args = list(size = 0.75))
+# mcmc_trace(fit1)
 # plot(fit1)
 # P > 1.1
 fig_prob_1.1 <- sum(tt$TxeCPR > 0.0953)/nrow(tt) # OR >1.1 (log (1.1) = 0.0953)
